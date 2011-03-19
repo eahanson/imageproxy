@@ -4,7 +4,7 @@ describe "parsing" do
   context "a simple URL" do
     subject { Options.new "/color/blue/size/medium" }
     it("should get the first pair") { subject[:color].should == "blue" }
-    it("should get the source") { subject[:size].should == "medium" }
+    it("should get the second pair") { subject[:size].should == "medium" }
   end
 
   context "source" do
