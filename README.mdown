@@ -1,7 +1,15 @@
 imageproxy
+==========
+
 
 Running Locally
 ---------------
 
 `shotgun`
 http://localhost:9393/
+
+
+Running Tests
+-------------
+
+`rspec spec`

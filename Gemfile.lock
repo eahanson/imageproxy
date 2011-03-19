@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     configuration (1.2.0)
+    diff-lcs (1.1.2)
     heroku (1.18.3)
       launchy (~> 0.3.2)
       rest-client (>= 1.4.0, < 1.7.0)
@@ -13,6 +14,14 @@ GEM
     rake (0.8.7)
     rest-client (1.6.1)
       mime-types (>= 1.16)
+    rspec (2.5.0)
+      rspec-core (~> 2.5.0)
+      rspec-expectations (~> 2.5.0)
+      rspec-mocks (~> 2.5.0)
+    rspec-core (2.5.1)
+    rspec-expectations (2.5.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.5.0)
     shotgun (0.9)
       rack (>= 1.0)
 
@@ -22,4 +31,5 @@ PLATFORMS
 DEPENDENCIES
   heroku
   rack
+  rspec
   shotgun
