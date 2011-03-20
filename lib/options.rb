@@ -6,17 +6,13 @@ class Options
     unescape_source
   end
 
-  def [](key)
-    @hash[key.to_s]
-  end
-
-  def []=(key, value)
-    @hash[key.to_s] = value
+  def method_missing(symbol)
+    @hash[symbol.to_s]
   end
 
   private
   
   def unescape_source
-    self[:source] = CGI.unescape(self[:source]) if self[:source]
+    @hash['source'] = CGI.unescape(@hash['source']) if @hash['source']
   end
 end
