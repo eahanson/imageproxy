@@ -2,14 +2,8 @@ imageproxy
 ==========
 
 
-Running Locally
----------------
+Working With The Code
+---------------------
 
-`shotgun`
-http://localhost:9393/
-
-
-Running Tests
--------------
-
-`rspec spec`
+`rake run` to run the server locally
+`rake spec` to run the specs

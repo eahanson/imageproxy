@@ -13,9 +13,10 @@ class Options
   def []=(key, value)
     @hash[key.to_s] = value
   end
+
+  private
   
   def unescape_source
-    return unless self[:source]
-    self[:source] = CGI.unescape(self[:source])
+    self[:source] = CGI.unescape(self[:source]) if self[:source]
   end
 end
