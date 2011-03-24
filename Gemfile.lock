@@ -31,5 +31,6 @@ PLATFORMS
 DEPENDENCIES
   heroku
   rack
+  rake
   rspec
   shotgun
