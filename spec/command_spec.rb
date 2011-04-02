@@ -1,10 +1,23 @@
 require 'spec_helper'
 
 describe Command do
+  before do
+    @mock_file = mock("file")
+    @mock_file.stub!(:path).and_return("/mock/file/path")
+
+    @command = Command.new(Options.new("/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg"))
+    @command.stub!(:file).and_return(@mock_file)
+    @command.stub!(:system)
+  end
+
   context "when resizing" do
     it "should execute the correct command" do
-      command = Command.new(Options.new("/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg")).command
-      command.should == 'curl -s "http://example.com/dog.jpg" | convert - -resize 10x20 dest.jpg'
+      @command.should_receive(:system).with(%'curl -s "http://example.com/dog.jpg" | convert - -resize 10x20 /mock/file/path')
+      @command.execute
+    end
+
+    it "should return the output file" do
+      @command.execute.should == @mock_file
     end
   end
 end

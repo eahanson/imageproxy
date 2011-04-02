@@ -1,5 +1,6 @@
-app = proc do |env|
-   [ 200, {'Content-Type' => 'text/plain'}, "imageproxy" ]
-end
-
-run app
+require 'bundler'
+require 'rack/sendfile'
+require File.dirname(__FILE__) + "/imageproxy"
+#run Rack::Cascade.new([Rack::Sendfile.new(Server.new), Server.new])
+run Rack::Sendfile.new(Server.new)
+#run Server.new
