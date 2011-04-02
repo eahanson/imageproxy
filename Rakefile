@@ -8,10 +8,15 @@ end
 
 task :default => :spec
 
-desc "Run the server"
+desc "Run the server locally (for development)"
 task :run do
-  puts
-  puts "http://localhost:9393/"
-  puts
+  require 'cgi'
+  puts <<EOF
+
+Examples:
+
+http://localhost:9393/resize/100x100/source/#{CGI.escape("http://www.google.com/images/logos/ps_logo2.png")}
+
+EOF
   system 'shotgun'
 end

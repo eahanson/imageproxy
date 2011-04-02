@@ -1,10 +1,10 @@
-class Command
+class Convert
   def initialize(options)
     @options = options
   end
 
   def execute
-    cmd = %'curl -s "#{@options.source}" | convert - -resize 10x20 #{file.path}'
+    cmd = %'curl -s "#{@options.source}" | convert - -resize #{@options.resize} #{file.path}'
     system cmd
     file
   end

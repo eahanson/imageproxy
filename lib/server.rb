@@ -1,16 +1,12 @@
-require 'tempfile'
-require 'pp'
-
 class Server
   def call(env)
-    path = env["PATH_INFO"]
-    command = Command.new(Options.new(path))
-#    file = File.open(command.execute.path)
-    file = command.execute
-    file.open
+    file = Convert.new(Options.new(env["PATH_INFO"])).execute
+
     class << file
       alias to_path path
     end
+
+    file.open
     [200, {"Content-Type" => "text/plain"}, file]
   end
 end
