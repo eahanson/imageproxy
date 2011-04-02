@@ -15,7 +15,7 @@ task :run do
 
 Examples:
 
-http://localhost:9393/resize/100x100/source/#{CGI.escape("http://www.google.com/images/logos/ps_logo2.png")}
+http://localhost:9393/convert/resize/100x100/source/#{CGI.escape("http://www.google.com/images/logos/ps_logo2.png")}
 
 EOF
   system 'shotgun'
