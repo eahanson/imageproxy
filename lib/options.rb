@@ -1,10 +1,10 @@
 class Options
   def initialize(query_string)
     params = query_string.split('/').reject { |s| s.nil? || s.empty? }
-    root_param = params.shift
-    raise NotFound unless root_param == 'convert' || root_param == 'process'
-    @hash = Hash[*params]
+    command = params.shift
 
+    @hash = Hash[*params]
+    @hash['command'] = command
     unescape_source
   end
 

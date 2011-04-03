@@ -12,7 +12,7 @@ describe Convert do
 
   context "when resizing" do
     it "should execute the correct command" do
-      @command.should_receive(:system).with(%'curl -s "http://example.com/dog.jpg" | convert - -resize 10x20 /mock/file/path')
+      @command.should_receive(:execute_command).with(%'curl -s "http://example.com/dog.jpg" | convert - -resize 10x20 /mock/file/path')
       @command.execute
     end
 

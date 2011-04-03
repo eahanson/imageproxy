@@ -3,22 +3,9 @@ require "#{File.dirname(__FILE__)}/../imageproxy"
 describe "parsing" do
   context "a simple URL" do
     subject { Options.new "/process/color/blue/size/medium" }
+    its(:command) { should == "process" }
     its(:color) { should == "blue" }
     its(:size) { should == "medium" }
-  end
-
-  context "root directory" do
-    it "can be 'process'" do
-      lambda { Options.new "/process/foo/bar" }.should_not raise_exception
-    end
-
-    it "can be 'convert'" do
-      lambda { Options.new "/convert/foo/bar" }.should_not raise_exception
-    end
-
-    it "raises an error otherwise" do
-      lambda { Options.new "/peanut/foo/bar" }.should raise_exception
-    end
   end
 
   context "source" do
