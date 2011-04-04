@@ -60,3 +60,9 @@ Install the gems:
 Start Apache:
 
     sudo /etc/init.d/httpd start
+
+
+License
+-------
+
+Licensed under the MIT license. See LICENSE.txt
