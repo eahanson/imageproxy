@@ -9,6 +9,11 @@ describe "parsing" do
   end
 
   context "source" do
+    context "when double-escaped" do
+      subject { Options.new "/process/source/http%253A%252F%252Fexample.com%252Fdog.jpg" }
+      it("should unescape") { subject.source.should == "http://example.com/dog.jpg" }
+    end
+    
     context "when escaped" do
       subject { Options.new "/process/source/http%3A%2F%2Fexample.com%2Fdog.jpg" }
       it("should unescape") { subject.source.should == "http://example.com/dog.jpg" }

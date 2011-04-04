@@ -19,6 +19,8 @@ class Options
   private
   
   def unescape_source
-    @hash['source'] = CGI.unescape(@hash['source']) if @hash['source']
+    if @hash['source']
+      @hash['source'] = CGI.unescape(CGI.unescape(@hash['source']))
+    end
   end
 end
