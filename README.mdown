@@ -20,7 +20,7 @@ An example of setting up imageproxy on EC2.
   * ssh into the instance as user `ec2-user`
   * Make a directory for the proxy: `sudo mkdir /opt/imageproxy` and `sudo chown ec2-user:ec2-user /opt/imageproxy`
   * Install the Ruby HTTP stack:
-    * `sudo yum -y install make gcc gcc-c++ http rubygems ruby-devel openssl-devel zlib-devel httpd-devel git curl-devel openssl`
+    * `sudo yum -y install make gcc gcc-c++ http rubygems ruby-devel openssl-devel zlib-devel httpd-devel git curl-devel openssl ImageMagick ImageMagick-devel`
     * `sudo gem install passenger`
     * `sudo passenger-install-apache2-module`
     * Update the Apache config as suggested by the passenger installer

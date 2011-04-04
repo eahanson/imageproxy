@@ -4,6 +4,6 @@ class Identify < Command
   end
 
   def execute
-    execute_command %'curl -s "#{@options.source}" | identify -'
+    execute_command %'curl -s "#{@options.source}" | identify -verbose -'
   end
 end

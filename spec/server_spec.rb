@@ -17,7 +17,8 @@ describe "Server" do
   context "when identifying" do
     it "should send back information about the image" do
       get "/identify/source/#{escaped_test_image_url}"
-      last_response.body.should =~ /PNG 200x116/
+      last_response.body.should =~ /Format: PNG.*Geometry: 200x116\+0\+0/m
     end
   end
 end
+
