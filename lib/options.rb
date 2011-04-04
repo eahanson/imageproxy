@@ -1,10 +1,12 @@
 class Options
-  def initialize(query_string)
-    params = query_string.split('/').reject { |s| s.nil? || s.empty? }
-    command = params.shift
+  def initialize(path, query_params)
+    params_from_path = path.split('/').reject { |s| s.nil? || s.empty? }
+    command = params_from_path.shift
 
-    @hash = Hash[*params]
+    @hash = Hash[*params_from_path]
     @hash['command'] = command
+    @hash.merge! query_params
+
     unescape_source
   end
 
@@ -13,7 +15,7 @@ class Options
   end
 
   def output_mime_type
-    "text/plain"
+    "image/png"
   end
 
   private

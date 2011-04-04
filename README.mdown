@@ -11,31 +11,52 @@ Working With The Code
 `rake spec` to run the specs
 
 
-Sample Installation
--------------------
+Sample EC2 Installation Recipe
+------------------------------
 
-An example of setting up imageproxy on EC2.
+Create and boot an instance of an AWS Linux AMI using [Amazon's EC2 console](https://console.aws.amazon.com/ec2/). In this example, I used a "micro" instance.
 
-  * Create and boot an instance of an AWS Linux AMI using [Amazon's EC2 console](https://console.aws.amazon.com/ec2/). In this example, I used a "micro" instance.
-  * ssh into the instance as user `ec2-user`
-  * Make a directory for the proxy: `sudo mkdir /opt/imageproxy` and `sudo chown ec2-user:ec2-user /opt/imageproxy`
-  * Install the Ruby HTTP stack:
-    * `sudo yum -y install make gcc gcc-c++ http rubygems ruby-devel openssl-devel zlib-devel httpd-devel git curl-devel openssl ImageMagick ImageMagick-devel`
-    * `sudo gem install passenger`
-    * `sudo passenger-install-apache2-module`
-    * Update the Apache config as suggested by the passenger installer
-       LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.5/ext/apache2/mod_passenger.so
-       PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.5
-       PassengerRuby /usr/bin/ruby
-    * Set up a VirtualHost as suggested by the passenger installer
-        <VirtualHost *:80>
-            ServerName ec2-184-72-213-98.compute-1.amazonaws.com
-            DocumentRoot /opt/imageproxy/public
-            <Directory /opt/imageproxy/public>
-                Allow from all
-                Options -MultiViews
-            </Directory>
-        </VirtualHost>
-  * Clone the imageproxy code: `git clone git://github.com/eahanson/imageproxy.git`
-  * Install the gems: `bundle install`
-  * Start Apache: `sudo /etc/init.d/httpd start`
+ssh into the instance as user `ec2-user`
+
+Make a directory for the proxy:
+
+    sudo mkdir /opt/imageproxy
+    sudo chown ec2-user:ec2-user /opt/imageproxy
+
+Install the Ruby HTTP stack + ImageMagick:
+
+    sudo yum -y install make gcc gcc-c++ http rubygems ruby-devel openssl-devel zlib-devel httpd-devel git curl-devel openssl ImageMagick ImageMagick-devel
+
+Install passenger:
+
+    sudo gem install passenger
+    sudo passenger-install-apache2-module
+
+Update the Apache config as suggested by the passenger installer
+
+    LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-3.0.5/ext/apache2/mod_passenger.so
+    PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-3.0.5
+    PassengerRuby /usr/bin/ruby
+
+Set up a VirtualHost as suggested by the passenger installer
+
+    <VirtualHost *:80>
+        ServerName ec2-184-72-213-98.compute-1.amazonaws.com
+        DocumentRoot /opt/imageproxy/public
+        <Directory /opt/imageproxy/public>
+            Allow from all
+            Options -MultiViews
+        </Directory>
+    </VirtualHost>
+
+Clone the imageproxy code:
+
+    git clone git://github.com/eahanson/imageproxy.git
+
+Install the gems:
+
+    bundle install
+
+Start Apache:
+
+    sudo /etc/init.d/httpd start

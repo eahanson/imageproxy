@@ -1,6 +1,8 @@
+require 'pp'
 class Server
   def call(env)
-    options = Options.new(env["PATH_INFO"])
+    request = Rack::Request.new(env)
+    options = Options.new(request.path_info, request.params)
 
     case options.command
       when "convert", "process"

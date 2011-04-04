@@ -5,7 +5,7 @@ describe Convert do
     @mock_file = mock("file")
     @mock_file.stub!(:path).and_return("/mock/file/path")
 
-    @command = Convert.new(Options.new("/convert/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg"))
+    @command = Convert.new(Options.new("/convert/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg", {}))
     @command.stub!(:file).and_return(@mock_file)
     @command.stub!(:system)
   end
