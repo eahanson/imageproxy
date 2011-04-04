@@ -14,8 +14,8 @@ class Options
     @hash[symbol.to_s]
   end
 
-  def output_mime_type
-    "image/png"
+  def content_type
+    MIME::Types.of(@hash['source']).first.content_type
   end
 
   private

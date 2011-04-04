@@ -32,4 +32,12 @@ describe Options do
     it("should add query params") { subject.resize.should == "20x20" }
     it("should keep params from path") { subject.source.should == "foo" }
   end
+
+  describe "content type" do
+    context "when guessing based on source filename" do
+      it("should understand .png") { Options.new("/convert", "source" => "foo.png").content_type.should == "image/png" }
+      it("should understand .jpg") { Options.new("/convert", "source" => "foo.jpg").content_type.should == "image/jpeg" }
+      it("should understand .JPEG") { Options.new("/convert", "source" => "foo.JPEG").content_type.should == "image/jpeg" }
+    end
+  end
 end

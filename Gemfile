@@ -2,6 +2,7 @@ source :rubygems
 
 gem "rack"
 gem "rake"
+gem "mime-types"
 
 group :development do
   gem "heroku"

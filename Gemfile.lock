@@ -32,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   heroku
+  mime-types
   rack
   rack-test
   rake

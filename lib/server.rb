@@ -12,7 +12,7 @@ class Server
         end
 
         file.open
-        [200, {"Content-Type" => options.output_mime_type}, file]
+        [200, {"Content-Type" => options.content_type}, file]
       when "identify"
         [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute]
       else
