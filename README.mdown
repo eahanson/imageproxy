@@ -7,8 +7,13 @@ A image processing proxy server, written in Ruby as a Rack application.
 Working With The Code
 ---------------------
 
-`rake run` to run the server locally
-`rake spec` to run the specs
+Tun run the server locally:
+
+    rake run
+
+To run the specs
+
+    rake spec
 
 
 Sample EC2 Installation Recipe

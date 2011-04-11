@@ -1,4 +1,3 @@
-require 'pp'
 class Server
   def call(env)
     request = Rack::Request.new(env)
