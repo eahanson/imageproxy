@@ -3,6 +3,113 @@ imageproxy
 
 A image processing proxy server, written in Ruby as a Rack application.
 
+Status
+------
+
+This project is pretty new, and is pretty bare-bones. There are definitely some improvements that can be/need to be made. Suggestions and pull requests are welcome.
+
+
+API
+---
+
+There are two major functions: `identify` and `convert`.
+
+### Identify
+
+`identify` spits out a lot of information about the provided image.
+
+#### Parameters
+
+`source` *(Required)* The URL of the image to identify.
+
+
+### Convert
+
+`convert` converts an image.
+
+#### Parameters
+
+`source` *(Required)* The URL of the image to convert.
+
+`resize` The new size of the image, in "WxH" format (e.g., `20x30`).
+
+`thumbnail` The new size of the image, in "WxH" format (e.g., `20x30`). Thumbnailing assumes the resulting image will be pretty small and makes some optimizations.
+
+`shape` The shape of the image, when `resize`ing or `thumbnail`ing to a different aspect ratio. The value can be `preserve` which will preserve the original aspect ratio, `pad` which will add padding to keep the proper aspect ratio (you can supply a `background` parameter to choose the background color to pad with, or leave blank to pad with transparent color if the image format allows it), and `cut` which will cut the image to fit the new size.
+
+`flip` Flip the image. The value can be `horizontal` or `vertical`.
+
+`rotate` Rotate the image. The value can be any number. When rotating to a non-right-angle, you can specify the `background` parameter to choose the color for the background.
+
+`format` Change the format. Possible formats include `gif`, `jpg`, `png`, `png8`, etc.
+
+`quality` Choose the compression quality for formats that support lossy compression. The value can be any number from 0 to 100.
+
+`progressive` Choose whether a JPEG image should be a progressive JPEG or not. Possible values are `true` and `false`.
+
+`background` Some operations allow for a background color to be provided. The format is hex (e.g., `#ff00ff`) or rgba (e.g., `rgba(20,30,19,0.4)`)
+
+### Request Format
+
+The request must start with `identify` or `convert` (for backwards-compatibility, `process` is a synonym for `convert`).
+
+The parameters can be query string parameters, like this:
+
+    http://example.com/convert?resize=100x100&shape=cut
+
+or can be Amazon CloudFront-compatible URLs, like this:
+
+    http://example.com/convert/resize/100x100/shape/cut
+
+**Important:** Make sure to URL escape all query parameters. When using the CloudFront-compatible URL format, make sure to **double-escape** the source URL:
+
+    http://example.com/convert?resize=100x100&source=http://www.google.com/images/logos/ps_logo2.png # WRONG - not escaped
+    http://example.com/convert?resize=100x100&source=http%3A%2F%2Fwww.google.com%2Fimages%2Flogos%2Fps_logo2.png # RIGHT - escaped
+
+    http://exampe.com/convert/resize/100x100/source/http://www.google.com/images/logos/ps_logo2.png # WRONG - not escaped
+    http://exampe.com/convert/resize/100x100/source/http%3A%2F%2Fwww.google.com%2Fimages%2Flogos%2Fps_logo2.png # WRONG - only escaped once
+    http://exampe.com/convert/resize/100x100/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png # RIGHT - escaped and then escaped again
+
+### Example requests
+
+CloudFront-compatible URLs:
+
+    http://example.com/convert/resize/100x100/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/identify/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Regular query string URLs:
+
+    http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/identify?source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Resize:
+
+    http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Resize with padding:
+
+    http://example.com/convert?resize=100x100&shape=pad&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/convert?resize=100x100&shape=pad&background=%23ff00ff&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Resize with cutting:
+
+    http://example.com/convert?resize=100x100&shape=cut&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Flipping:
+
+    http://example.com/convert?flip=horizontal&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/convert?flip=vertical&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Rotating:
+
+    http://example.com/convert?rotate=90&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/convert?rotate=120&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+    http://example.com/convert?rotate=120&background=%23ff00ff&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
+Combo:
+
+    http://example.com/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
+
 
 Working With The Code
 ---------------------
