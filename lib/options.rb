@@ -11,7 +11,7 @@ class Options
   end
 
   def method_missing(symbol)
-    @hash[symbol.to_s]
+    @hash[symbol.to_s] || @hash[symbol]
   end
 
   def content_type
