@@ -1,5 +1,6 @@
 Bundler.require :test
-require File.dirname(__FILE__) + "/../imageproxy"
+
+Dir.glob(File.join(File.dirname(__FILE__), "..", "lib", "**", "*.rb")).each {|f| require f }
 
 def response_body_as_file
   result_file = Tempfile.new("request_spec")

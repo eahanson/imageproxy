@@ -1,3 +1,5 @@
+require File.join(File.expand_path(File.dirname(__FILE__)), "command")
+
 class Compare < Command
   def initialize(a, b)
     @path_a = to_path(a)

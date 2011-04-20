@@ -1,3 +1,7 @@
+require File.join(File.expand_path(File.dirname(__FILE__)), "options")
+require File.join(File.expand_path(File.dirname(__FILE__)), "convert")
+require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
+
 class Server
   def call(env)
     request = Rack::Request.new(env)
