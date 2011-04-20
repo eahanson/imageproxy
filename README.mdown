@@ -8,6 +8,22 @@ Status
 
 This project is pretty new, and is pretty bare-bones. There are definitely some improvements that can be/need to be made. Suggestions and pull requests are welcome.
 
+### Current Features
+
+  * display information about an image
+  * resize, flip, rotate, change format and change quality of images
+  * standard query-parameter based URLs as well as Amazon CloudFront-compatibile URLs
+  * tested on Heroku and Amazon EC2
+
+### Future Features
+
+  * signed requests (to stop unauthorized use)
+  * pass cookies through
+  * add X-Forwarded-For header
+  * X-Sendfile / X-Accel-Redirect header
+  * try mounting inside a Rails app
+  * nice error messages for improper API use
+  * performance
 
 API
 ---
@@ -172,6 +188,22 @@ Install the gems:
 Start Apache:
 
     sudo /etc/init.d/httpd start
+
+
+Sample Heroku Installation Recipe
+------------------------------
+
+Clone the imageproxy code:
+
+    git clone git://github.com/eahanson/imageproxy.git
+
+Set up Heroku:
+
+    http://devcenter.heroku.com/articles/quickstart
+
+Deploy:
+
+    git push heroku master
 
 
 License
