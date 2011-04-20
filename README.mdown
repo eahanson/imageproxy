@@ -177,4 +177,4 @@ Start Apache:
 License
 -------
 
-Licensed under the MIT license. See LICENSE.txt
+Licensed under the MIT license. See LICENSE.txt.
