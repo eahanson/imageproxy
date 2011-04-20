@@ -3,10 +3,19 @@ imageproxy
 
 A image processing proxy server, written in Ruby as a Rack application.
 
+There are many possible uses for this, but one major use is to resize images on-the-fly directly from HTML code, rather than processing the image when it is first uploaded or created. For example, if a user uploads a file to your site and it gets stored in http://example.com/uploads/39c0c11af.png, you could show a 50x50 px version like this:
+
+    <img src="http://example.com/convert?resize=50x50&source=http%3A%2F%2Fexample.com%2Fuploads%2F39c0c11af.png">
+
+If you ever decided to change the size, you wouldn't have to re-encode anything, just change the HTML:
+
+    <img src="http://example.com/convert?resize=75x75&source=http%3A%2F%2Fexample.com%2Fuploads%2F39c0c11af.png">
+
+
 Status
 ------
 
-This project is pretty new, and is pretty bare-bones. There are definitely some improvements that can be/need to be made. Suggestions and pull requests are welcome.
+This project is pretty new. There are definitely some improvements that can be/need to be made. Suggestions and pull requests are welcome.
 
 ### Current Features
 
