@@ -24,6 +24,11 @@ describe Options do
         subject { Options.new "/process/source/foo", {} }
         it("should not unescape") { subject.source.should == "foo" }
       end
+
+      context "when parameter is named 'src'" do
+        subject { Options.new "/process/src/foo", {} }
+        it("should rename to 'source'") { subject.source.should == "foo" }
+      end
     end
   end
 
