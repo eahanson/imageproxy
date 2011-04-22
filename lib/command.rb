@@ -6,6 +6,11 @@ class Command
     [output_to_string(stdout), output_to_string(stderr)].join("")
   end
 
+  def curl(url, options={})
+    user_agent = options[:user_agent] || "imageproxy"
+    %|curl -s -A "#{user_agent}" "#{url}"|
+  end
+
   def to_path(obj)
     obj.respond_to?(:path) ? obj.path : obj.to_s
   end

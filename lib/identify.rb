@@ -5,7 +5,7 @@ class Identify < Command
     @options = options
   end
 
-  def execute
-    execute_command %'curl -s "#{@options.source}" | identify -verbose -'
+  def execute(user_agent=nil)
+    execute_command %'#{curl @options.source, :user_agent => user_agent} | identify -verbose -'
   end
 end

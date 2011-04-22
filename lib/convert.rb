@@ -7,8 +7,8 @@ class Convert < Command
     @options = options
   end
 
-  def execute
-    execute_command %'curl -s "#{options.source}" | convert - #{convert_options} #{new_format}#{file.path}'
+  def execute(user_agent=nil)
+    execute_command %'#{curl options.source, :user_agent => user_agent} | convert - #{convert_options} #{new_format}#{file.path}'
     file
   end
 
