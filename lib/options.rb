@@ -1,3 +1,5 @@
+require 'cgi'
+
 class Options
   def initialize(path, query_params)
     params_from_path = path.split('/').reject { |s| s.nil? || s.empty? }

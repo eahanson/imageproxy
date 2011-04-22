@@ -26,6 +26,7 @@ describe Convert do
     end
 
     it "should return the output file" do
+      @command.stub!(:execute_command)
       @command.execute.should == @mock_file
     end
   end
