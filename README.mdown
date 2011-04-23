@@ -28,6 +28,8 @@ This project is pretty new. There are definitely some improvements that can be/n
 ### Future Features
 
   * signed requests (to stop unauthorized use)
+  * obfuscated params
+  * better documentation
   * X-Sendfile / X-Accel-Redirect header
   * try mounting inside a Rails app
   * nice error messages for improper API use
