@@ -28,8 +28,10 @@ This project is pretty new. There are definitely some improvements that can be/n
 
 ### Future Features
 
-  * allow signature param to be in path (currently it can only be in query string)
+Feel free to help out with some of these :)
+
   * obfuscated params
+  * allow signature param to be in path (currently it can only be in query string)
   * better documentation
   * X-Sendfile / X-Accel-Redirect header
   * signature generation testing tool
@@ -174,17 +176,6 @@ With signature (signed with secret key "SEEKRET"):
     http://example.com/convert/resize/100x100/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png?signature=iNoljMh0kALsoxRLzJfr7Wcq%2BnY%3D
     http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png&signature=KLga1QNdCY8Xu4thsKdbTUjnYAk%3D
 
-Working With The Code
----------------------
-
-Tun run the server locally:
-
-    rake run
-
-To run the specs
-
-    rake spec
-
 
 Sample EC2 Installation Recipe
 ------------------------------
@@ -251,6 +242,18 @@ Set up Heroku:
 Deploy:
 
     git push heroku master
+
+
+If You Want To Modify The Code
+------------------------------
+
+Tun run the server locally:
+
+    rake run
+
+To run the specs
+
+    rake spec
 
 
 License
