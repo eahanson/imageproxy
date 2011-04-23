@@ -25,12 +25,12 @@ This project is pretty new. There are definitely some improvements that can be/n
   * tested on Heroku and Amazon EC2
   * use the requester's user agent string
   * signed requests (to stop unauthorized use)
+  * obfuscated params
 
 ### Future Features
 
 Feel free to help out with some of these :)
 
-  * obfuscated params
   * better documentation
   * X-Sendfile / X-Accel-Redirect header
   * signature generation testing tool
@@ -129,7 +129,15 @@ Example Ruby code to generate the signature:
 
     digest = OpenSSL::Digest::Digest.new("sha1")
     Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip
-    
+
+### Obfuscating Requests
+
+You may obfuscate your requests by Base64 encoding and then URL encoding your query string or path. The parameter name for this encoded value is `_` if you're using a query string or `-` if you're using a path. Example:
+
+    http://example.com/convert?src=http://example.com/dog.jpg&resize=10x10
+    http://example.com/convert?_=c3JjPWh0dHA6Ly9leGFtcGxlLmNvbS9kb2cuanBnJnJlc2l6ZT0xMHgxMA%3D%3D
+    http://example.com/convert/-/c3JjPWh0dHA6Ly9leGFtcGxlLmNvbS9kb2cuanBnJnJlc2l6ZT0xMHgxMA%3D%3D
+
 ### Example requests
 
 CloudFront-compatible URLs:

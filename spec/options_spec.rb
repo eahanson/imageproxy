@@ -52,4 +52,20 @@ describe Options do
       it("should understand .JPEG") { Options.new("/convert", "source" => "foo.JPEG").content_type.should == "image/jpeg" }
     end
   end
+
+  describe "obfuscation" do
+    it "should allow the query string to be encoded in base64" do
+      encoded = CGI.escape(Base64.encode64("resize=20x20&source=http://example.com/dog.jpg"))
+      options = Options.new "/convert", "_" => encoded
+      options.resize.should == "20x20"
+      options.source.should == "http://example.com/dog.jpg"
+    end
+
+    it "should allow the path to be encoded in base64" do
+      encoded = CGI.escape(Base64.encode64("resize/20x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg"))
+      options = Options.new "/convert/-/#{encoded}", {}
+      options.resize.should == "20x20"
+      options.source.should == "http://example.com/dog.jpg"
+    end
+  end
 end
