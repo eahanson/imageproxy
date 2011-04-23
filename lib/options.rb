@@ -1,3 +1,4 @@
+require 'uri'
 require 'cgi'
 require 'mime/types'
 
@@ -12,6 +13,7 @@ class Options
     @hash["source"] = @hash.delete("src") if @hash.has_key?("src")
     
     unescape_source
+    unescape_signature
   end
 
   def method_missing(symbol)
@@ -25,8 +27,10 @@ class Options
   private
   
   def unescape_source
-    if @hash['source']
-      @hash['source'] = CGI.unescape(CGI.unescape(@hash['source']))
-    end
+    @hash['source'] &&= CGI.unescape(CGI.unescape(@hash['source']))
+  end
+
+  def unescape_signature
+    @hash['signature'] &&= URI.unescape(@hash['signature'])
   end
 end

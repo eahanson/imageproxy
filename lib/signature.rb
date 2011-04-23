@@ -9,9 +9,12 @@ class Signature
   def self.remove_signature_from(path)
     #TODO: do this in fewer passes
     path.
-      sub(/&signature(=[^&]*)?(?=&|$)/, "").
-      sub(/\?signature(=[^&]*)?&/, "?").
-      sub(/\?signature(=[^&]*)?$/, "")
+      sub(%r{&signature(=[^&]*)?(?=&|$)}, "").
+      sub(%r{\?signature(=[^&]*)?&}, "?").
+      sub(%r{\?signature(=[^&]*)?$}, "").
+      sub(%r{/signature/[^\?/]+/}, "/").
+      sub(%r{/signature/[^\?/]+\?}, "?").
+      sub(%r{/signature/[^\?/]+}, "")
   end
 
   def self.correct?(signature, path, secret)

@@ -41,5 +41,26 @@ describe Signature do
       Signature.remove_signature_from("/convert/a/apple/b/banana?c=cherry&d=donut&signature=SIG").should == 
         "/convert/a/apple/b/banana?c=cherry&d=donut"
     end
+
+    it "should remove the signature from the beginning of the path" do
+      Signature.remove_signature_from("/convert/signature/SIG/a/apple/b/banana?c=cherry&d=donut").should ==
+        "/convert/a/apple/b/banana?c=cherry&d=donut"
+    end
+
+    it "should remove the signature from the middle of the path" do
+      Signature.remove_signature_from("/convert/a/apple/signature/SIG/b/banana?c=cherry&d=donut").should ==
+        "/convert/a/apple/b/banana?c=cherry&d=donut"
+    end
+
+    it "should remove the signature from the end of the path" do
+      Signature.remove_signature_from("/convert/a/apple/b/banana/signature/SIG?c=cherry&d=donut").should ==
+        "/convert/a/apple/b/banana?c=cherry&d=donut"
+    end
+
+    it "should remove the signature from the end of the path when there's no query string" do
+      Signature.remove_signature_from("/convert/a/apple/b/banana/signature/SIG").should ==
+        "/convert/a/apple/b/banana"
+    end
   end
 end
+

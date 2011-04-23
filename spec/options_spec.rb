@@ -30,6 +30,13 @@ describe Options do
         it("should rename to 'source'") { subject.source.should == "foo" }
       end
     end
+
+    context "signature" do
+      context "when escaped with + signs" do
+        subject { Options.new "/process/source/foo/signature/foo+bar", {} }
+        it("should keep the + sign") { subject.signature.should == "foo+bar" }
+      end
+    end
   end
 
   describe "adding query params" do

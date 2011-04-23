@@ -49,6 +49,13 @@ describe "Server" do
       get_with_signature_required "#{url}?signature=#{CGI.escape(signature)}"
       last_response.status.should == 200
     end
+
+    it "should work if the signature is part of the path" do
+      url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
+      signature = Signature.create(url, @secret)
+      get_with_signature_required "#{url}/signature/#{URI.escape(signature)}"
+      last_response.status.should == 200
+    end
   end
 end
 

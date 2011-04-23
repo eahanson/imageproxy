@@ -31,7 +31,6 @@ This project is pretty new. There are definitely some improvements that can be/n
 Feel free to help out with some of these :)
 
   * obfuscated params
-  * allow signature param to be in path (currently it can only be in query string)
   * better documentation
   * X-Sendfile / X-Accel-Redirect header
   * signature generation testing tool
@@ -116,7 +115,7 @@ To require that requests are signed, set the following two environment variables
     IMAGEPROXY_SIGNATURE_REQUIRED=true
     IMAGEPROXY_SIGNATURE_SECRET=some secret key
 
-Then add a `signature` parameter to your query string. **This parameter must be in the query string, not in the path.**
+Then add a `signature` parameter to your query string or path.
 
 The signature is calculated with the following formula, which is the same formula that Amazon Web Services uses:
 
@@ -124,7 +123,7 @@ The signature is calculated with the following formula, which is the same formul
 
 where YourSecretKey is a secret key that you make up, and StringToSign is the full path of the request, excluding host name and the "signature" parameter, in the same order as in the query. For `http://example.com/convert/resize/100x100?shape=cut&signature=szFGj470w%2ByhJYJfTRryFLF9msA%3D` the StringToSign would be `/convert/resize/100x100?shape=cut`.
 
-Remember to URL-escape the signature when including in your query string.
+Remember to CGI-escape the signature when including in your query string, and to URL-escape it when including it in the path. (For example, in a query paramter, a "+" sign needs to be encoded as "%2B, while in the path, a "+" sign needs to stay a "+" sign.)
 
 Example Ruby code to generate the signature:
 

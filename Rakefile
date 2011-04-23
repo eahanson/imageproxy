@@ -10,8 +10,8 @@ task :default => :spec
 
 desc "Run the server locally (for development)"
 task :run do
-  require 'cgi'
-  source = CGI.escape(CGI.escape("http://www.google.com/images/logos/ps_logo2.png"))
+  require 'uri'
+  source = URI.escape(URI.escape("http://www.google.com/images/logos/ps_logo2.png"))
   puts <<EOF
 
 Examples:
