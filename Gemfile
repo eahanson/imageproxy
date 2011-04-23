@@ -4,12 +4,10 @@ gem "rack"
 gem "rake"
 gem "mime-types"
 
-group :development do
+group :development, :test do
   gem "heroku"
   gem "shotgun"
-end
-
-group :test do
   gem "rspec"
   gem "rack-test", :require => "rack/test"
+  gem "awesome_print"
 end

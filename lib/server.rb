@@ -8,6 +8,13 @@ class Server
     options = Options.new(request.path_info, request.params)
     user_agent = request.env["HTTP_USER_AGENT"]
 
+    if signature_required?(request)
+      raise "Missing siganture" if options.signature.nil?
+      
+      valid_signature = Signature.correct?(options.signature, request.fullpath, request.env["IMAGEPROXY_SIGNATURE_SECRET"])
+      raise "Invalid signature #{options.signature} for #{request.url}" unless valid_signature
+    end
+
     case options.command
       when "convert", "process"
         file = Convert.new(options).execute(user_agent)
@@ -25,5 +32,12 @@ class Server
   rescue
     STDERR.puts $!
     [500, {"Content-Type" => "text/plain"}, "Sorry, an internal error occurred"]
+  end
+
+  private
+
+  def signature_required?(request)
+    required = request.env["IMAGEPROXY_SIGNATURE_REQUIRED"]
+    required != nil && required.casecmp("TRUE") == 0
   end
 end

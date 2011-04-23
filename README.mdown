@@ -24,10 +24,11 @@ This project is pretty new. There are definitely some improvements that can be/n
   * standard query-parameter based URLs as well as Amazon CloudFront-compatibile URLs
   * tested on Heroku and Amazon EC2
   * use the requester's user agent string
+  * signed requests (to stop unauthorized use)
 
 ### Future Features
 
-  * signed requests (to stop unauthorized use)
+  * signature generation testing tool
   * obfuscated params
   * better documentation
   * X-Sendfile / X-Accel-Redirect header
@@ -75,6 +76,8 @@ There are two major functions: `identify` and `convert`.
 
 `background` Some operations allow for a background color to be provided. The format is hex (e.g., `#ff00ff`) or rgba (e.g., `rgba(20,30,19,0.4)`)
 
+`signature` To stop unauthorized use. See the "Signing Requests" section of this document.
+
 ### Request Format
 
 The request must start with `identify` or `convert` (for backwards-compatibility, `process` is a synonym for `convert`).
@@ -83,9 +86,13 @@ The parameters can be query string parameters, like this:
 
     http://example.com/convert?resize=100x100&shape=cut
 
-or can be Amazon CloudFront-compatible URLs, like this:
+Or, the parameters can be Amazon CloudFront-compatible URLs, like this:
 
     http://example.com/convert/resize/100x100/shape/cut
+
+You can also mix the parameters if you like. This doesn't make much sense except for the case of the `signature` parameter which must be a query param:
+
+    http://example.com/convert/resize/100x100?signature=szFGj470w%2ByhJYJfTRryFLF9msA%3D
 
 **Important:** Make sure to URL escape all query parameters. When using the CloudFront-compatible URL format, make sure to **double-escape** the source URL:
 
@@ -96,6 +103,28 @@ or can be Amazon CloudFront-compatible URLs, like this:
     http://exampe.com/convert/resize/100x100/source/http%3A%2F%2Fwww.google.com%2Fimages%2Flogos%2Fps_logo2.png # WRONG - only escaped once
     http://exampe.com/convert/resize/100x100/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png # RIGHT - escaped and then escaped again
 
+### Signing Requests
+
+To require that requests are signed, set the following two environment variables:
+
+    IMAGEPROXY_SIGNATURE_REQUIRED=true
+    IMAGEPROXY_SIGNATURE_SECRET=some secret key
+
+Then add a `signature` parameter to your query string. **This parameter must be in the query string, not in the path.**
+
+The signature is calculated with the following formula, which is the same formula that Amazon Web Services uses:
+
+    Base64( HMAC-SHA1( UTF-8-Encoding-Of( YourSecretKey, StringToSign ) ) );
+
+where YourSecretKey is a secret key that you make up, and StringToSign is the full path of the request, excluding host name and the "signature" parameter, in the same order as in the query. For `http://example.com/convert/resize/100x100?shape=cut&signature=szFGj470w%2ByhJYJfTRryFLF9msA%3D` the StringToSign would be `/convert/resize/100x100?shape=cut`.
+
+Remember to URL-escape the signature when including in your query string.
+
+Example Ruby code to generate the signature:
+
+    digest = OpenSSL::Digest::Digest.new("sha1")
+    Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip
+    
 ### Example requests
 
 CloudFront-compatible URLs:
@@ -136,6 +165,10 @@ Combo:
 
     http://example.com/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png
 
+With signature (signed with secret key "SEEKRET"):
+
+    http://example.com/convert/resize/100x100/source/http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png?signature=iNoljMh0kALsoxRLzJfr7Wcq%2BnY%3D
+    http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png&signature=KLga1QNdCY8Xu4thsKdbTUjnYAk%3D
 
 Working With The Code
 ---------------------

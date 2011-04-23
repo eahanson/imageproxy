@@ -8,11 +8,10 @@ class Signature
 
   def self.remove_signature_from(path)
     #TODO: do this in fewer passes
-    path.sub! %r{&signature=SIG&}, "&"
-    path.sub! %r{signature=SIG&}, ""
-    path.sub! %r{&signature=SIG}, ""
-    path.sub! %r{/signature/[^/?]+}, ""
-    path
+    path.
+      sub(/&signature(=[^&]*)?(?=&|$)/, "").
+      sub(/\?signature(=[^&]*)?&/, "?").
+      sub(/\?signature(=[^&]*)?$/, "")
   end
 
   def self.correct?(signature, path, secret)

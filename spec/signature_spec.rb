@@ -22,21 +22,11 @@ describe Signature do
   end
 
   describe "#remove_signature_from" do
-    it "should remove the signature from the beginning of the path" do
-      Signature.remove_signature_from("/convert/signature/SIG/a/apple/b/banana?c=cherry&d=donut").should == 
-        "/convert/a/apple/b/banana?c=cherry&d=donut"
+    it "should remove the signature when it's the only query param" do
+      Signature.remove_signature_from("/convert/a/apple/b/banana?signature=SIG").should ==
+        "/convert/a/apple/b/banana"
     end
-    
-    it "should remove the signature from the middle of the path" do
-      Signature.remove_signature_from("/convert/a/apple/signature/SIG/b/banana?c=cherry&d=donut").should == 
-        "/convert/a/apple/b/banana?c=cherry&d=donut"
-    end
-    
-    it "should remove the signature from the end of the path" do
-      Signature.remove_signature_from("/convert/a/apple/b/banana/signature/SIG?c=cherry&d=donut").should == 
-        "/convert/a/apple/b/banana?c=cherry&d=donut"
-    end
-    
+
     it "should remove the signature from the beginning of the query string" do
       Signature.remove_signature_from("/convert/a/apple/b/banana?signature=SIG&c=cherry&d=donut").should == 
         "/convert/a/apple/b/banana?c=cherry&d=donut"

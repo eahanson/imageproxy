@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    awesome_print (0.3.2)
     configuration (1.2.0)
     diff-lcs (1.1.2)
     heroku (1.18.3)
@@ -31,6 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   heroku
   mime-types
   rack

@@ -1,4 +1,5 @@
 require 'cgi'
+require 'mime/types'
 
 class Options
   def initialize(path, query_params)
