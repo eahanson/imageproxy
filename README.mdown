@@ -28,11 +28,14 @@ This project is pretty new. There are definitely some improvements that can be/n
 
 ### Future Features
 
-  * signature generation testing tool
+  * allow signature param to be in path (currently it can only be in query string)
   * obfuscated params
   * better documentation
   * X-Sendfile / X-Accel-Redirect header
+  * signature generation testing tool
   * try mounting inside a Rails app
+  * Rails helper for generating image tags that use imageproxy
+  * package as a gem?
   * nice error messages for improper API use
   * performance
 
@@ -49,6 +52,7 @@ There are two major functions: `identify` and `convert`.
 
 `source` *(Required)* The URL of the image to identify.
 
+`signature` To stop unauthorized use. See the "Signing Requests" section of this document.
 
 ### Convert
 
