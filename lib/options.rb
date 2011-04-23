@@ -8,7 +8,8 @@ class Options
     @hash = Hash[*params_from_path]
     @hash['command'] = command
     @hash.merge! query_params
-
+    @hash["source"] = @hash.delete("src") if @hash.has_key?("src")
+    
     unescape_source
   end
 
