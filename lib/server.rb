@@ -12,6 +12,9 @@ class Server
 
     request.env["IMAGEPROXY_ALLOWED_DOMAINS"] = ENV['IMAGEPROXY_ALLOWED_DOMAINS']
     request.env["IMAGEPROXY_MAX_SIZE"] = ENV['IMAGEPROXY_MAX_SIZE']
+    request.env["IMAGEPROXY_CACHE_TIME"] = ENV['IMAGEPROXY_CACHE_TIME']
+
+    cachetime = request.env["IMAGEPROXY_CACHE_TIME"].to_i
 
     if signature_required?(request)
       raise "Missing siganture" if options.signature.nil?
@@ -36,7 +39,7 @@ class Server
         end
 
         file.open
-        [200, {"Content-Type" => options.content_type}, file]
+        [200, {"Content-Type" => options.content_type, "Cache-Control" => "max-age=#{cachetime}, must-revalidate"}, file]
       when "identify"
         [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute(user_agent)]
       else
