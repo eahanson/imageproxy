@@ -21,8 +21,7 @@ describe "Server" do
 
   context "when converting" do
     it "should send back the right result" do
-      get "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      last_response.status.should == 200
+      get("/convert/resize/10x20/source/#{escaped_test_image_url}").should succeed
       Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
     end
   end
@@ -41,29 +40,25 @@ describe "Server" do
     end
 
     it "should fail if the signature is missing" do
-      get "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      last_response.status.should == 500
+      get("/convert/resize/10x20/source/#{escaped_test_image_url}").should fail
     end
 
     it "should fail if the signature is incorrect" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
       signature = "BAD"
-      get "#{url}?signature=#{signature}"
-      last_response.status.should == 500
+      get("#{url}?signature=#{signature}").should fail
     end
 
     it "should work if the signature is correct" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
       signature = Signature.create(url, @secret)
-      get "#{url}?signature=#{CGI.escape(signature)}"
-      last_response.status.should == 200
+      get("#{url}?signature=#{CGI.escape(signature)}").should succeed
     end
 
     it "should work if the signature is part of the path" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
       signature = Signature.create(url, @secret)
-      get "#{url}/signature/#{URI.escape(signature)}"
-      last_response.status.should == 200
+      get("#{url}/signature/#{URI.escape(signature)}").should succeed
     end
   end
 
@@ -81,13 +76,11 @@ describe "Server" do
     end
 
     it "should fail if the source domain is not in the allowed domains" do
-      get "/convert/resize/10x20/source/#{CGI.escape('http://example.net/dog.jpg')}"
-      last_response.status.should == 500
+      get("/convert/resize/10x20/source/#{CGI.escape('http://example.net/dog.jpg')}").should fail
     end
 
     it "should pass if the source domain is in the allowed domains" do
-      get "/convert/resize/10x20/source/#{CGI.escape('http://example.org/dog.jpg')}"
-      last_response.status.should == 200
+      get("/convert/resize/10x20/source/#{CGI.escape('http://example.org/dog.jpg')}").should succeed
     end
   end
 
