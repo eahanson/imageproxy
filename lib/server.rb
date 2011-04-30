@@ -8,25 +8,16 @@ class Server
     request = Rack::Request.new(env)
     options = Options.new(request.path_info, request.params)
     user_agent = request.env["HTTP_USER_AGENT"]
-    domain = url_to_domain(options.source)
 
-    request.env["IMAGEPROXY_ALLOWED_DOMAINS"] = ENV['IMAGEPROXY_ALLOWED_DOMAINS']
-    request.env["IMAGEPROXY_MAX_SIZE"] = ENV['IMAGEPROXY_MAX_SIZE']
-
-    if signature_required?(request)
+    if config?(:signature_required)
       raise "Missing siganture" if options.signature.nil?
 
-      valid_signature = Signature.correct?(options.signature, request.fullpath, request.env["IMAGEPROXY_SIGNATURE_SECRET"])
+      valid_signature = Signature.correct?(options.signature, request.fullpath, config(:signature_secret))
       raise "Invalid signature #{options.signature} for #{request.url}" unless valid_signature
     end
 
-    if domains = domain_restricted(request)
-      raise "Wrong domain" unless domains.include? domain
-    end
-
-    if max_size = size_restricted(request)
-      raise "Image size too large" unless requested_size(options.resize) < max_size
-    end
+    raise "Invalid domain" unless domain_allowed? options.source
+    raise "Image size too large" if max_size && requested_size(options.resize) > max_size
 
     case options.command
       when "convert", "process", nil
@@ -44,30 +35,36 @@ class Server
     end
   rescue
     STDERR.puts $!
-    [500, {"Content-Type" => "text/plain"}, "Sorry, an internal error occurred"]
+    [500, {"Content-Type" => "text/plain"}, "Error (#{$!})"]
   end
 
   private
 
-  def signature_required?(request)
-    required = request.env["IMAGEPROXY_SIGNATURE_REQUIRED"]
-    required != nil && required.casecmp("TRUE") == 0
+  def config(symbol)
+    ENV["IMAGEPROXY_#{symbol.to_s.upcase}"]
   end
 
-  def domain_restricted(request)
-    domains = request.env["IMAGEPROXY_ALLOWED_DOMAINS"].nil? ? false : request.env["IMAGEPROXY_ALLOWED_DOMAINS"].split(',')
+  def config?(symbol)
+    config(symbol) && config(symbol).casecmp("TRUE") == 0
   end
 
-  def size_restricted(request)
-    max_size = request.env["IMAGEPROXY_MAX_SIZE"].nil? ? false : request.env["IMAGEPROXY_MAX_SIZE"].to_i
+  def domain_allowed?(url)
+    return true unless allowed_domains
+    allowed_domains.include?(url_to_domain url)
   end
 
   def url_to_domain(url)
-    begin
-      URI::parse( url ).host.split( "." )[-2,2].join(".")
-    rescue
-      ""
-    end
+    URI::parse(url).host.split(".")[-2, 2].join(".")
+  rescue
+    ""
+  end
+
+  def allowed_domains
+    config(:allowed_domains) && config(:allowed_domains).split(",").map(&:strip)
+  end
+
+  def max_size
+    config(:max_size) && config(:max_size).to_i
   end
 
   def requested_size(req_size)
@@ -78,5 +75,4 @@ class Server
       sizes[0].to_i
     end
   end
-
 end
