@@ -61,7 +61,7 @@ There are two major functions: `identify` and `convert`.
 
 #### Parameters
 
-`source` *(Required)* The URL of the image to convert.
+`source` *(Required)* The URL of the image to convert. (Also aliased to `src`.)
 
 `resize` The new size of the image, in "WxH" format (e.g., `20x30`).
 
@@ -82,6 +82,10 @@ There are two major functions: `identify` and `convert`.
 `background` Some operations allow for a background color to be provided. The format is hex (e.g., `#ff00ff`) or rgba (e.g., `rgba(20,30,19,0.4)`)
 
 `signature` To stop unauthorized use. See the "Signing Requests" section of this document.
+
+`allowed_domains` A comma-separated list of second-level domains (e.g., "example.com, example.org") that are valid domains for the `source` parameter. If not specified, then the `source` parameter can reference any domain.
+
+`max_size` The maximum dimension allowed for a `resize` or `thumbnail` operation. Specifying `20` would cause a resize of `10x30` to fail because the maximum dimension of `20` is less than the largest requested dimension of `30`.
 
 ### Request Format
 
@@ -262,6 +266,10 @@ To run the specs
 
     rake spec
 
+Thanks
+------
+
+Thanks to [David Hall](https://github.com/moonhouse) for code contributions.
 
 License
 -------
