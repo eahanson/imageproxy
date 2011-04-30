@@ -107,6 +107,14 @@ describe "Server" do
       get("/convert/resize/50x51/source/#{escaped_test_image_url}").should fail
     end
 
+    it "should pass when thumbnailing to a smaller size" do
+      get("/convert/thumbnail/20x20/source/#{escaped_test_image_url}").should succeed
+    end
+
+    it "should fail when thumbnailing to a larger size" do
+      get("/convert/thumbnail/50x51/source/#{escaped_test_image_url}").should fail
+    end
+
   end
 end
 

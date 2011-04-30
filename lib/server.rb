@@ -17,7 +17,7 @@ class Server
     end
 
     raise "Invalid domain" unless domain_allowed? options.source
-    raise "Image size too large" if max_size && requested_size(options.resize) > max_size
+    raise "Image size too large" if exceeds_max_size(options.resize, options.thumbnail)
 
     case options.command
       when "convert", "process", nil
@@ -61,6 +61,10 @@ class Server
 
   def allowed_domains
     config(:allowed_domains) && config(:allowed_domains).split(",").map(&:strip)
+  end
+
+  def exceeds_max_size(*sizes)
+    max_size && sizes.any? { |size| size && requested_size(size) > max_size }
   end
 
   def max_size
