@@ -5,9 +5,10 @@ class Selftest
         <head>
           <title>imageproxy selftest</title>
           <style type="text/css">
-            body { font-family: monospace; background: url(/background.png); }
+            body { background: url(/background.png); font-family: "Helvetica", sans-serif; font-size: smaller; }
             h3 { margin: 2em 0 0 0; }
-            img { display: block; border: 1px solid blue; }
+            img { display: block; border: 1px solid black; margin: 1em 0; }
+            .footer { margin-top: 2em; border-top: 1px solid #999; padding-top: 0.5em; font-size: smallest; }
           </style>
         </head>
         <body>
@@ -17,6 +18,8 @@ class Selftest
     source = CGI.escape(URI.escape(URI.escape(url_prefix + "/sample.png")))
     
     examples = [
+      ["Original image", "/sample.png"],
+        
       ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
       ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
 
@@ -45,6 +48,7 @@ class Selftest
     end
 
     html += <<-HTML
+          <div class="footer"><a href="https://github.com/eahanson/imageproxy">imageproxy</a> selftest</div>
         </body>
       </html>
     HTML
