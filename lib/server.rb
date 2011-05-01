@@ -1,9 +1,14 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), "options")
 require File.join(File.expand_path(File.dirname(__FILE__)), "convert")
 require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
+require File.join(File.expand_path(File.dirname(__FILE__)), "selftest")
 require 'uri'
 
 class Server
+  def initialize
+    @file_server = Rack::File.new(File.join(File.expand_path(File.dirname(__FILE__)), "..", "public"))
+  end
+  
   def call(env)
     request = Rack::Request.new(env)
     options = Options.new(request.path_info, request.params)
@@ -30,8 +35,10 @@ class Server
         [200, {"Content-Type" => options.content_type}, file]
       when "identify"
         [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute(user_agent)]
+      when "selftest"
+        [200, {"Content-Type" => "text/html"}, Selftest.html(request)]
       else
-        [404, {"Content-Type" => "text/plain"}, "Not found"]
+        @file_server.call(env)
     end
   rescue
     STDERR.puts $!
