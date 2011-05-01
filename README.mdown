@@ -43,7 +43,7 @@ Feel free to help out with some of these :)
 API
 ---
 
-There are two major functions: `identify` and `convert`.
+There are two major functions: `identify` and `convert`, plus a helpful `selftest` function.
 
 ### Identify
 
@@ -188,6 +188,11 @@ With signature (signed with secret key "SEEKRET"):
     http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png&signature=KLga1QNdCY8Xu4thsKdbTUjnYAk%3D
 
 
+### Selftest
+
+You can go to the `/selftest` URL to see everything in action. For example: [http://imageproxy.heroku.com/selftest](http://imageproxy.heroku.com/selftest).
+
+
 Sample EC2 Installation Recipe
 ------------------------------
 
@@ -260,7 +265,11 @@ If You Want To Modify The Code
 
 Tun run the server locally:
 
-    rake run
+    rackup
+
+Make sure everthing is working:
+
+    http://localhost:9292/selftest
 
 To run the specs
 
