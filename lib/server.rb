@@ -13,6 +13,7 @@ class Server
     request = Rack::Request.new(env)
     options = Options.new(request.path_info, request.params)
     user_agent = request.env["HTTP_USER_AGENT"]
+    cachetime = config(:cache_time) ? config(:cache_time) : 86400
 
     if config?(:signature_required)
       raise "Missing siganture" if options.signature.nil?
