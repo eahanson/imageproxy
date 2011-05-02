@@ -11,7 +11,7 @@ end
 
 def test_image_path(size=nil)
   size_suffix = size.nil? ? "" : "_#{size}"
-  File.expand_path(File.dirname(__FILE__) + "/../test_images/dog#{size_suffix}.png")
+  File.expand_path(File.dirname(__FILE__) + "/../public/sample#{size_suffix}.png")
 end
 
 def test_image_url

@@ -43,7 +43,7 @@ Feel free to help out with some of these :)
 API
 ---
 
-There are two major functions: `identify` and `convert`.
+There are two major functions: `identify` and `convert`, plus a helpful `selftest` function.
 
 ### Identify
 
@@ -61,7 +61,7 @@ There are two major functions: `identify` and `convert`.
 
 #### Parameters
 
-`source` *(Required)* The URL of the image to convert.
+`source` *(Required)* The URL of the image to convert. (Also aliased to `src`.)
 
 `resize` The new size of the image, in "WxH" format (e.g., `20x30`).
 
@@ -82,6 +82,10 @@ There are two major functions: `identify` and `convert`.
 `background` Some operations allow for a background color to be provided. The format is hex (e.g., `#ff00ff`) or rgba (e.g., `rgba(20,30,19,0.4)`)
 
 `signature` To stop unauthorized use. See the "Signing Requests" section of this document.
+
+`allowed_domains` A comma-separated list of second-level domains (e.g., "example.com, example.org") that are valid domains for the `source` parameter. If not specified, then the `source` parameter can reference any domain.
+
+`max_size` The maximum dimension allowed for a `resize` or `thumbnail` operation. Specifying `20` would cause a resize of `10x30` to fail because the maximum dimension of `20` is less than the largest requested dimension of `30`.
 
 ### Request Format
 
@@ -184,6 +188,11 @@ With signature (signed with secret key "SEEKRET"):
     http://example.com/convert?resize=100x100&source=http%253A%252F%252Fwww.google.com%252Fimages%252Flogos%252Fps_logo2.png&signature=KLga1QNdCY8Xu4thsKdbTUjnYAk%3D
 
 
+### Selftest
+
+You can go to the `/selftest` URL to see everything in action. For example: [http://imageproxy.heroku.com/selftest](http://imageproxy.heroku.com/selftest).
+
+
 Sample EC2 Installation Recipe
 ------------------------------
 
@@ -256,12 +265,20 @@ If You Want To Modify The Code
 
 Tun run the server locally:
 
-    rake run
+    rackup
+
+Make sure everthing is working:
+
+    http://localhost:9292/selftest
 
 To run the specs
 
     rake spec
 
+Thanks
+------
+
+Thanks to [David Hall](https://github.com/moonhouse) for code contributions.
 
 License
 -------

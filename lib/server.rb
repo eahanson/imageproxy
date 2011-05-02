@@ -1,35 +1,28 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), "options")
 require File.join(File.expand_path(File.dirname(__FILE__)), "convert")
 require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
+require File.join(File.expand_path(File.dirname(__FILE__)), "selftest")
 require 'uri'
 
 class Server
+  def initialize
+    @file_server = Rack::File.new(File.join(File.expand_path(File.dirname(__FILE__)), "..", "public"))
+  end
+  
   def call(env)
     request = Rack::Request.new(env)
     options = Options.new(request.path_info, request.params)
     user_agent = request.env["HTTP_USER_AGENT"]
-    domain = url_to_domain(options.source)
 
-    request.env["IMAGEPROXY_ALLOWED_DOMAINS"] = ENV['IMAGEPROXY_ALLOWED_DOMAINS']
-    request.env["IMAGEPROXY_MAX_SIZE"] = ENV['IMAGEPROXY_MAX_SIZE']
-    request.env["IMAGEPROXY_CACHE_TIME"] = ENV['IMAGEPROXY_CACHE_TIME']
-
-    cachetime = request.env["IMAGEPROXY_CACHE_TIME"].to_i
-
-    if signature_required?(request)
+    if config?(:signature_required)
       raise "Missing siganture" if options.signature.nil?
 
-      valid_signature = Signature.correct?(options.signature, request.fullpath, request.env["IMAGEPROXY_SIGNATURE_SECRET"])
+      valid_signature = Signature.correct?(options.signature, request.fullpath, config(:signature_secret))
       raise "Invalid signature #{options.signature} for #{request.url}" unless valid_signature
     end
 
-    if domains = domain_restricted(request)
-      raise "Wrong domain" unless domains.include? domain
-    end
-
-    if max_size = size_restricted(request)
-      raise "Image size too large" unless requested_size(options.resize) < max_size
-    end
+    raise "Invalid domain" unless domain_allowed? options.source
+    raise "Image size too large" if exceeds_max_size(options.resize, options.thumbnail)
 
     case options.command
       when "convert", "process", nil
@@ -42,35 +35,47 @@ class Server
         [200, {"Content-Type" => options.content_type, "Cache-Control" => "max-age=#{cachetime}, must-revalidate"}, file]
       when "identify"
         [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute(user_agent)]
+      when "selftest"
+        [200, {"Content-Type" => "text/html"}, Selftest.html(request)]
       else
-        [404, {"Content-Type" => "text/plain"}, "Not found"]
+        @file_server.call(env)
     end
   rescue
     STDERR.puts $!
-    [500, {"Content-Type" => "text/plain"}, "Sorry, an internal error occurred"]
+    [500, {"Content-Type" => "text/plain"}, "Error (#{$!})"]
   end
 
   private
 
-  def signature_required?(request)
-    required = request.env["IMAGEPROXY_SIGNATURE_REQUIRED"]
-    required != nil && required.casecmp("TRUE") == 0
+  def config(symbol)
+    ENV["IMAGEPROXY_#{symbol.to_s.upcase}"]
   end
 
-  def domain_restricted(request)
-    domains = request.env["IMAGEPROXY_ALLOWED_DOMAINS"].nil? ? false : request.env["IMAGEPROXY_ALLOWED_DOMAINS"].split(',')
+  def config?(symbol)
+    config(symbol) && config(symbol).casecmp("TRUE") == 0
   end
 
-  def size_restricted(request)
-    max_size = request.env["IMAGEPROXY_MAX_SIZE"].nil? ? false : request.env["IMAGEPROXY_MAX_SIZE"].to_i
+  def domain_allowed?(url)
+    return true unless allowed_domains
+    allowed_domains.include?(url_to_domain url)
   end
 
   def url_to_domain(url)
-    begin
-      URI::parse( url ).host.split( "." )[-2,2].join(".")
-    rescue
-      ""
-    end
+    URI::parse(url).host.split(".")[-2, 2].join(".")
+  rescue
+    ""
+  end
+
+  def allowed_domains
+    config(:allowed_domains) && config(:allowed_domains).split(",").map(&:strip)
+  end
+
+  def exceeds_max_size(*sizes)
+    max_size && sizes.any? { |size| size && requested_size(size) > max_size }
+  end
+
+  def max_size
+    config(:max_size) && config(:max_size).to_i
   end
 
   def requested_size(req_size)
@@ -81,5 +86,4 @@ class Server
       sizes[0].to_i
     end
   end
-
 end
