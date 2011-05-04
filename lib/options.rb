@@ -19,10 +19,13 @@ class Options
   end
 
   def check_parameters
-    @hash['resize'] = /^[0-9]{1,5}(x[0-9]{1,5})+$/.match(@hash['resize'])[0] if @hash.has_key?('resize')
-    @hash['thumbnail'] = /^[0-9]{1,5}(x[0-9]{1,5})+$/.match(@hash['thumbnail'])[0] if @hash.has_key?('thumbnail')
-    @hash['rotate'] = /^(-)?[0-9]{1,3}(\.[0-9]+)?$/.match(@hash['rotate'])[0] if @hash.has_key?('rotate')
-    @hash['format'] = /^[0-9a-zA-Z]{2,6}$/.match(@hash['format'])[0] if @hash.has_key?('format')
+    check_param('resize',/^[0-9]{1,5}(x[0-9]{1,5})+$/)
+    check_param('thumbnail',/^[0-9]{1,5}(x[0-9]{1,5})+$/)
+    check_param('rotate',/^(-)?[0-9]{1,3}(\.[0-9]+)?$/)
+    check_param('format',/^[0-9a-zA-Z]{2,6}$/)
+    check_param('progressive',/^true|false$/)
+    check_param('background',/^#[0-9a-f]{3}([0-9a-f]{3})?|rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-1](.[0-9]+)?\)$/)
+    check_param('shape',/^preserve|pad|cut$/)
     if @hash.has_key?('quality')
       quality = @hash['quality'].to_i
       if quality < 0
@@ -33,9 +36,14 @@ class Options
       end
       @hash['quality'] = quality.to_s
     end
-    @hash['progressive'] = /^true|false$/.match(@hash['progressive'])[0] if @hash.has_key?('progressive')
-    @hash['background'] = /^#[0-9a-f]{3}([0-9a-f]{3})?|rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-1](.[0-9]+)?\)$/.match(@hash['background'])[0] if @hash.has_key?('background')
-    @hash['shape'] = /^preserve|pad|cut$/.match(@hash['shape'])[0] if @hash.has_key?('shape')
+  end
+
+  def check_param(param, regex)
+    if @hash.has_key? param
+      if (! @hash[param] =~ regex )
+        @hash.delete(param)
+      end
+    end
   end
 
   def method_missing(symbol)
