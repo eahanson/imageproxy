@@ -15,7 +15,7 @@ class Selftest
     HTML
 
     url_prefix = "#{request.scheme}://#{request.host_with_port}"
-    source = CGI.escape(URI.escape(URI.escape(url_prefix + "/sample.png")))
+    source = CGI.escape(URI.escape(URI.escape("http://eahanson.s3.amazonaws.com/imageproxy/sample.png")))
     
     examples = [
       ["Original image", "/sample.png"],
