@@ -18,7 +18,7 @@ class Selftest
     source = CGI.escape(URI.escape(URI.escape("http://eahanson.s3.amazonaws.com/imageproxy/sample.png")))
     
     examples = [
-      ["Original image", "/sample.png"],
+      ["Original image", source],
         
       ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
       ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
