@@ -17,6 +17,10 @@ See examples at:
 
   http://localhost:9393/selftest
 
+If you set IMAGEPROXY_SIGNATURE_REQUIRED and IMAGEPROXY_SIGNATURE_SECRET
+environment variables, then the requests in the selftest will be
+signed.
+
 EOF
   system 'shotgun'
 end

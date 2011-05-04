@@ -1,5 +1,5 @@
 class Selftest
-  def self.html(request)
+  def self.html(request, signature_required, signature_secret)
     html = <<-HTML
       <html>
         <head>
@@ -17,10 +17,14 @@ class Selftest
     url_prefix = "#{request.scheme}://#{request.host_with_port}"
     raw_source = "http://eahanson.s3.amazonaws.com/imageproxy/sample.png"
     source = CGI.escape(URI.escape(URI.escape(raw_source)))
-    
+
+    html += <<-HTML
+      <h3>Original Image</h3>
+      <a href="#{raw_source}">#{raw_source}</a>
+      <img src="#{raw_source}">
+    HTML
+
     examples = [
-      ["Original image", raw_source],
-        
       ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
       ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
 
@@ -40,7 +44,16 @@ class Selftest
     ]
 
     examples.each do |example|
-      example_url = example[1].start_with?("http") ? example[1] : url_prefix + example[1]
+      path = example[1]
+      if (signature_required)
+        signature = CGI.escape(Signature.create(path, signature_secret))
+        if path.include?("&")
+          path += "&signature=#{signature}"
+        else
+          path += "/signature/#{signature}"
+        end
+      end
+      example_url = url_prefix + path
       html += <<-HTML
         <h3>#{example[0]}</h3>
         <a href="#{example_url}">#{example_url}</a>
