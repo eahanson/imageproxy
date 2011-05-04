@@ -15,10 +15,11 @@ class Selftest
     HTML
 
     url_prefix = "#{request.scheme}://#{request.host_with_port}"
-    source = CGI.escape(URI.escape(URI.escape("http://eahanson.s3.amazonaws.com/imageproxy/sample.png")))
+    raw_source = "http://eahanson.s3.amazonaws.com/imageproxy/sample.png"
+    source = CGI.escape(URI.escape(URI.escape(raw_source)))
     
     examples = [
-      ["Original image", source],
+      ["Original image", raw_source],
         
       ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
       ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
