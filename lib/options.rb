@@ -15,6 +15,27 @@ class Options
     
     unescape_source
     unescape_signature
+    check_parameters
+  end
+
+  def check_parameters
+    @hash['resize'] = /^[0-9]{1,5}(x[0-9]{1,5})+$/.match(@hash['resize'])[0] if @hash.has_key?('resize')
+    @hash['thumbnail'] = /^[0-9]{1,5}(x[0-9]{1,5})+$/.match(@hash['thumbnail'])[0] if @hash.has_key?('thumbnail')
+    @hash['rotate'] = /^(-)?[0-9]{1,3}(\.[0-9]+)?$/.match(@hash['rotate'])[0] if @hash.has_key?('rotate')
+    @hash['format'] = /^[0-9a-zA-Z]{2,6}$/.match(@hash['format'])[0] if @hash.has_key?('format')
+    if @hash.has_key?('quality')
+      quality = @hash['quality'].to_i
+      if quality < 0
+        quality = 0
+        else if quality > 100
+          quality = 100
+        end
+      end
+      @hash['quality'] = quality.to_s
+    end
+    @hash['progressive'] = /^true|false$/.match(@hash['progressive'])[0] if @hash.has_key?('progressive')
+    @hash['background'] = /^#[0-9a-f]{3}([0-9a-f]{3})?|rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-1](.[0-9]+)?\)$/.match(@hash['background'])[0] if @hash.has_key?('background')
+    @hash['shape'] = /^preserve|pad|cut$/.match(@hash['shape'])[0] if @hash.has_key?('shape')
   end
 
   def method_missing(symbol)
