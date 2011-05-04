@@ -39,7 +39,7 @@ class Selftest
     ]
 
     examples.each do |example|
-      example_url = url_prefix + example[1]
+      example_url = example[1].start_with?("http") ? example[1] : url_prefix + example[1]
       html += <<-HTML
         <h3>#{example[0]}</h3>
         <a href="#{example_url}">#{example_url}</a>
