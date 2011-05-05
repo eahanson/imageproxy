@@ -19,7 +19,9 @@ class Options
   end
 
   def check_parameters
+    puts 'Hello'
     check_param('resize',/^[0-9]{1,5}(x[0-9]{1,5})+$/)
+    print 'Bo '
     check_param('thumbnail',/^[0-9]{1,5}(x[0-9]{1,5})+$/)
     check_param('rotate',/^(-)?[0-9]{1,3}(\.[0-9]+)?$/)
     check_param('format',/^[0-9a-zA-Z]{2,6}$/)
@@ -38,9 +40,9 @@ class Options
     end
   end
 
-  def check_param(param, regex)
+  def check_param(param, rega)
     if @hash.has_key? param
-      if (! @hash[param] =~ regex )
+      if (! rega.match(@hash[param]))
         @hash.delete(param)
       end
     end
