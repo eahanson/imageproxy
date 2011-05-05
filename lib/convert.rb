@@ -5,6 +5,9 @@ class Convert < Command
   
   def initialize(options)
     @options = options
+    if (!(options.resize || options.thumbnail || options.rotate || options.flip || options.format || options.quality))
+      raise "Missing action or illegal parameter value"
+    end
   end
 
   def execute(user_agent=nil)
