@@ -11,6 +11,7 @@ If you ever decided to change the size, you wouldn't have to re-encode anything,
 
     <img src="http://example.com/convert?resize=75x75&source=http%3A%2F%2Fexample.com%2Fuploads%2F39c0c11af.png">
 
+See http://imageproxy.heroku.com/selftest for some examples (it's running on Heroku's free plan, so it will be a bit slow).
 
 Status
 ------
@@ -39,6 +40,15 @@ Feel free to help out with some of these :)
   * package as a gem?
   * nice error messages for improper API use
   * performance
+
+
+PERFORMANCE
+-----------
+
+imageproxy doesn't do any sort of caching. That kind of thing is better left up to CDNs (like Amazon CloudFront or VoxCast CDN) or to caching proxies such as Varnish.
+
+Also, imageproxy itself isn't nearly as fast as it could be. It's written in an interpreted language, and it shells out to curl and ImageMagick to do its work. Presumably, it would be way faster written in C as an Apache module, but this implementation was quite a bit easier :)
+
 
 API
 ---

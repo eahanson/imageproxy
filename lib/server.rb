@@ -2,31 +2,26 @@ require File.join(File.expand_path(File.dirname(__FILE__)), "options")
 require File.join(File.expand_path(File.dirname(__FILE__)), "convert")
 require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
 require File.join(File.expand_path(File.dirname(__FILE__)), "selftest")
+require File.join(File.expand_path(File.dirname(__FILE__)), "signature")
 require 'uri'
 
 class Server
   def initialize
     @file_server = Rack::File.new(File.join(File.expand_path(File.dirname(__FILE__)), "..", "public"))
   end
-  
+
   def call(env)
     request = Rack::Request.new(env)
     options = Options.new(request.path_info, request.params)
     user_agent = request.env["HTTP_USER_AGENT"]
     cachetime = config(:cache_time) ? config(:cache_time) : 86400
 
-    if config?(:signature_required)
-      raise "Missing siganture" if options.signature.nil?
-
-      valid_signature = Signature.correct?(options.signature, request.fullpath, config(:signature_secret))
-      raise "Invalid signature #{options.signature} for #{request.url}" unless valid_signature
-    end
-
-    raise "Invalid domain" unless domain_allowed? options.source
-    raise "Image size too large" if exceeds_max_size(options.resize, options.thumbnail)
-
     case options.command
       when "convert", "process", nil
+        check_signature request, options
+        check_domain options
+        check_size options
+
         file = Convert.new(options).execute(user_agent)
         class << file
           alias to_path path
@@ -35,9 +30,12 @@ class Server
         file.open
         [200, {"Content-Type" => options.content_type, "Cache-Control" => "max-age=#{cachetime}, must-revalidate"}, file]
       when "identify"
+        check_signature request, options
+        check_domain options
+
         [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute(user_agent)]
       when "selftest"
-        [200, {"Content-Type" => "text/html"}, Selftest.html(request)]
+        [200, {"Content-Type" => "text/html"}, Selftest.html(request, config?(:signature_required), config(:signature_secret))]
       else
         @file_server.call(env)
     end
@@ -55,6 +53,23 @@ class Server
   def config?(symbol)
     config(symbol) && config(symbol).casecmp("TRUE") == 0
   end
+
+  def check_signature(request, options)
+    if config?(:signature_required)
+      raise "Missing siganture" if options.signature.nil?
+
+      valid_signature = Signature.correct?(options.signature, request.fullpath, config(:signature_secret))
+      raise "Invalid signature #{options.signature} for #{request.url}" unless valid_signature
+    end
+  end
+
+  def check_domain(options)
+    raise "Invalid domain" unless domain_allowed? options.source
+  end
+
+  def check_size(options)
+    raise "Image size too large" if exceeds_max_size(options.resize, options.thumbnail)
+  end  
 
   def domain_allowed?(url)
     return true unless allowed_domains

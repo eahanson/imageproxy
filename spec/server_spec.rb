@@ -21,6 +21,7 @@ describe "Server" do
 
   context "when converting" do
     it "should send back the right result" do
+      app.stub!(:config) { |sym| nil }
       get("/convert/resize/10x20/source/#{escaped_test_image_url}").should succeed
       Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
     end
@@ -28,6 +29,7 @@ describe "Server" do
 
   context "when identifying" do
     it "should send back information about the image" do
+      app.stub!(:config) { |sym| nil }
       get "/identify/source/#{escaped_test_image_url}"
       last_response.body.should =~ /Format: PNG.*Geometry: 200x116\+0\+0/m
     end
