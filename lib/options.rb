@@ -23,19 +23,10 @@ class Options
     check_param('thumbnail',/^[0-9]{1,5}(x[0-9]{1,5})?$/)
     check_param('rotate',/^(-)?[0-9]{1,3}(\.[0-9]+)?$/)
     check_param('format',/^[0-9a-zA-Z]{2,6}$/)
-    check_param('progressive',/^true|false$/)
+    check_param('progressive',/^true|false$/i)
     check_param('background',/^#[0-9a-f]{3}([0-9a-f]{3})?|rgba\([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-1](.[0-9]+)?\)$/)
-    check_param('shape',/^preserve|pad|cut$/)
-    if @hash.has_key?('quality')
-      quality = @hash['quality'].to_i
-      if quality < 0
-        quality = 0
-        else if quality > 100
-          quality = 100
-        end
-      end
-      @hash['quality'] = quality.to_s
-    end
+    check_param('shape',/^preserve|pad|cut$/i)
+    @hash['quality'] = [[@hash['quality'].to_i, 100].min, 0].max.to_s if @hash.has_key?('quality')
   end
 
   def check_param(param, rega)

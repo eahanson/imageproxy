@@ -1,4 +1,6 @@
+require 'base64'
 require "#{File.dirname(__FILE__)}/../imageproxy"
+require "#{File.dirname(__FILE__)}/../lib/options"
 
 describe Options do
   describe "parsing path" do
@@ -66,6 +68,20 @@ describe Options do
       options = Options.new "/convert/-/#{encoded}", {}
       options.resize.should == "20x20"
       options.source.should == "http://example.com/dog.jpg"
+    end
+  end
+
+  describe "quality" do
+    it "should be set to 0 if it's less than 0" do
+      Options.new("/convert", "quality" => "-39").quality.should == "0"
+    end
+
+    it "should be set to 100 if it's > 100" do
+      Options.new("/convert", "quality" => "293").quality.should == "100"
+    end
+    
+    it "should not change if it's >= 0 <= 100" do
+      Options.new("/convert", "quality" => "59").quality.should == "59"
     end
   end
 end
