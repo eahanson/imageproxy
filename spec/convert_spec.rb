@@ -135,17 +135,17 @@ describe Convert do
 
   context "when converting to progressive" do
     it("should be 'JPEG' if progressive is 'true'") do
-      command(:progressive => "true").convert_options.should ==
-        "-interlace JPEG"
+      command(:resize => "10x10", :progressive => "true").convert_options.should ==
+        "-resize 10x10 -interlace JPEG"
     end
 
     it("should be 'none' if progressive is 'false'") do
-      command(:progressive => "false").convert_options.should ==
-        "-interlace none"
+      command(:resize => "10x10", :progressive => "false").convert_options.should ==
+        "-resize 10x10 -interlace none"
     end
 
     it("should not be set if progressive isn't supplied") do
-      command({}).convert_options.should_not match /interlace/
+      command({:resize => "10x10"}).convert_options.should_not match /interlace/
     end
   end
 end
