@@ -133,16 +133,16 @@ Then add a `signature` parameter to your query string or path.
 
 The signature is calculated with the following formula, which is the same formula that Amazon Web Services uses:
 
-    Base64( HMAC-SHA1( UTF-8-Encoding-Of( YourSecretKey, StringToSign ) ) );
+    URLSafeBase64( HMAC-SHA1( UTF-8-Encoding-Of( YourSecretKey, StringToSign ) ) );
 
-where YourSecretKey is a secret key that you make up, and StringToSign is the full path of the request, excluding host name and the "signature" parameter, in the same order as in the query. For `http://example.com/convert/resize/100x100?shape=cut&signature=szFGj470w%2ByhJYJfTRryFLF9msA%3D` the StringToSign would be `/convert/resize/100x100?shape=cut`.
+Where YourSecretKey is a secret key that you make up, and StringToSign is the full path of the request, excluding host name and the "signature" parameter, in the same order as in the query. For `http://example.com/convert/resize/100x100?shape=cut&signature=szFGj470w%2ByhJYJfTRryFLF9msA%3D` the StringToSign would be `/convert/resize/100x100?shape=cut`.
 
-Remember to CGI-escape the signature when including in your query string, and to URL-escape it when including it in the path. (For example, in a query paramter, a "+" sign needs to be encoded as "%2B, while in the path, a "+" sign needs to stay a "+" sign.)
+URL safe base64 is the normal encoding but with replacing the + with - and / with _.
 
 Example Ruby code to generate the signature:
 
     digest = OpenSSL::Digest::Digest.new("sha1")
-    Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip
+    Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip.tr('+/', '-_')
 
 ### Obfuscating Requests
 
