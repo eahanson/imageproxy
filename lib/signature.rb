@@ -18,6 +18,7 @@ class Signature
   end
 
   def self.correct?(signature, path, secret)
-    signature != nil && path != nil && secret != nil && create(path, secret) == signature
+    created = create(path, secret)
+    signature != nil && path != nil && secret != nil && (created == signature || created == signature.tr('+/', '-_'))
   end
 end

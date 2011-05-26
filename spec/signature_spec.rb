@@ -19,6 +19,14 @@ describe Signature do
     it "should return false if signature is nil" do
       Signature.correct?(nil, "/convert?src=SRC&resize=10x10&key=KEY", "SECRET").should be_false
     end
+
+    it "should handle URL-safe signatures" do
+      Signature.correct?("_v70E0zfdcRR4cJehS2mhvqJ-8s=", "YLANEBHFSJGCAWKDNCKWEKJRXKPMYU", "SECRET").should be_true
+    end
+
+    it "should handle non-URL-safe signatures" do
+      Signature.correct?("k7DMQ/G8YAsbSovX+mDFjlHHMjo=", "YPMMYCRRECCCIPSXPDDFIJFSINOIRC", "SECRET").should be_true
+    end
   end
 
   describe "#remove_signature_from" do
