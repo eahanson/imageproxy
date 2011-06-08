@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{imageproxy}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Erik Hanson"]
@@ -26,15 +26,15 @@ Gem::Specification.new do |s|
     "VERSION",
     "config.ru",
     "imageproxy.gemspec",
-    "imageproxy.rb",
-    "lib/command.rb",
-    "lib/compare.rb",
-    "lib/convert.rb",
-    "lib/identify.rb",
-    "lib/options.rb",
-    "lib/selftest.rb",
-    "lib/server.rb",
-    "lib/signature.rb",
+    "lib/imageproxy.rb",
+    "lib/imageproxy/command.rb",
+    "lib/imageproxy/compare.rb",
+    "lib/imageproxy/convert.rb",
+    "lib/imageproxy/identify.rb",
+    "lib/imageproxy/options.rb",
+    "lib/imageproxy/selftest.rb",
+    "lib/imageproxy/server.rb",
+    "lib/imageproxy/signature.rb",
     "public/background.png",
     "public/sample.png",
     "public/sample_10x20.png",
