@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "config.ru",
+    "imageproxy.gemspec",
     "imageproxy.rb",
     "lib/command.rb",
     "lib/compare.rb",
