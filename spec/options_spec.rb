@@ -1,6 +1,5 @@
 require 'base64'
-require "#{File.dirname(__FILE__)}/../imageproxy"
-require "#{File.dirname(__FILE__)}/../lib/options"
+require "#{File.dirname(__FILE__)}/../lib/imageproxy"
 
 describe Imageproxy::Options do
   describe "parsing path" do
