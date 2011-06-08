@@ -1,6 +1,7 @@
-class Selftest
-  def self.html(request, signature_required, signature_secret)
-    html = <<-HTML
+module Imageproxy
+  class Selftest
+    def self.html(request, signature_required, signature_secret)
+      html = <<-HTML
       <html>
         <head>
           <title>imageproxy selftest</title>
@@ -12,61 +13,62 @@ class Selftest
           </style>
         </head>
         <body>
-    HTML
+      HTML
 
-    url_prefix = "#{request.scheme}://#{request.host_with_port}"
-    raw_source = "http://eahanson.s3.amazonaws.com/imageproxy/sample.png"
-    source = CGI.escape(URI.escape(URI.escape(raw_source)))
+      url_prefix = "#{request.scheme}://#{request.host_with_port}"
+      raw_source = "http://eahanson.s3.amazonaws.com/imageproxy/sample.png"
+      source = CGI.escape(URI.escape(URI.escape(raw_source)))
 
-    html += <<-HTML
+      html += <<-HTML
       <h3>Original Image</h3>
       <a href="#{raw_source}">#{raw_source}</a>
       <img src="#{raw_source}">
-    HTML
+      HTML
 
-    examples = [
-      ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
-      ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
+      examples = [
+        ["Resize (regular query-string URL format)", "/convert?resize=100x100&source=#{source}"],
+        ["Resize (CloudFront-compatible URL format)", "/convert/resize/100x100/source/#{source}"],
 
-      ["Resize with padding", "/convert?resize=100x100&shape=pad&source=#{source}"],
-      ["Resize with padding & background color", "/convert?resize=100x100&shape=pad&background=%23ff00ff&source=#{source}"],
+        ["Resize with padding", "/convert?resize=100x100&shape=pad&source=#{source}"],
+        ["Resize with padding & background color", "/convert?resize=100x100&shape=pad&background=%23ff00ff&source=#{source}"],
 
-      ["Resize with cutting", "/convert?resize=100x100&shape=cut&source=#{source}"],
+        ["Resize with cutting", "/convert?resize=100x100&shape=cut&source=#{source}"],
 
-      ["Flipping horizontally", "/convert?flip=horizontal&source=#{source}"],
-      ["Flipping vertically", "/convert?flip=vertical&source=#{source}"],
+        ["Flipping horizontally", "/convert?flip=horizontal&source=#{source}"],
+        ["Flipping vertically", "/convert?flip=vertical&source=#{source}"],
 
-      ["Rotating to a 90-degree increment", "/convert?rotate=90&source=#{source}"],
-      ["Rotating to a non-90-degree increment", "/convert?rotate=120&source=#{source}"],
-      ["Rotating to a non-90-degree increment with a background color", "/convert?rotate=120&background=%23ff00ff&source=#{source}"],
+        ["Rotating to a 90-degree increment", "/convert?rotate=90&source=#{source}"],
+        ["Rotating to a non-90-degree increment", "/convert?rotate=120&source=#{source}"],
+        ["Rotating to a non-90-degree increment with a background color", "/convert?rotate=120&background=%23ff00ff&source=#{source}"],
 
-      ["Combo", "/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=#{source}"]
-    ]
+        ["Combo", "/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=#{source}"]
+      ]
 
-    examples.each do |example|
-      path = example[1]
-      if (signature_required)
-        signature = CGI.escape(Signature.create(path, signature_secret))
-        if path.include?("&")
-          path += "&signature=#{signature}"
-        else
-          path += "/signature/#{signature}"
+      examples.each do |example|
+        path = example[1]
+        if (signature_required)
+          signature = CGI.escape(Signature.create(path, signature_secret))
+          if path.include?("&")
+            path += "&signature=#{signature}"
+          else
+            path += "/signature/#{signature}"
+          end
         end
-      end
-      example_url = url_prefix + path
-      html += <<-HTML
+        example_url = url_prefix + path
+        html += <<-HTML
         <h3>#{example[0]}</h3>
         <a href="#{example_url}">#{example_url}</a>
         <img src="#{example_url}">
-      HTML
-    end
+        HTML
+      end
 
-    html += <<-HTML
+      html += <<-HTML
           <div class="footer"><a href="https://github.com/eahanson/imageproxy">imageproxy</a> selftest</div>
         </body>
       </html>
-    HTML
+      HTML
 
-    html
+      html
+    end
   end
 end

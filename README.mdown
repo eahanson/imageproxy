@@ -50,6 +50,12 @@ imageproxy doesn't do any sort of caching. That kind of thing is better left up 
 Also, imageproxy itself isn't nearly as fast as it could be. It's written in an interpreted language, and it shells out to curl and ImageMagick to do its work. Presumably, it would be way faster written in C as an Apache module, but this implementation was quite a bit easier :)
 
 
+INSTALLING
+----------
+
+  gem install imageproxy
+
+
 API
 ---
 

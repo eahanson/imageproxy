@@ -16,14 +16,14 @@ describe "Server" do
   end
 
   def app
-    @app ||= Server.new
+    @app ||= Imageproxy::Server.new
   end
 
   context "when converting" do
     it "should send back the right result" do
       app.stub!(:config) { |sym| nil }
       get("/convert/resize/10x20/source/#{escaped_test_image_url}").should succeed
-      Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
+      Imageproxy::Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
     end
   end
 
@@ -53,13 +53,13 @@ describe "Server" do
 
     it "should work if the signature is correct" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      signature = Signature.create(url, @secret)
+      signature = Imageproxy::Signature.create(url, @secret)
       get("#{url}?signature=#{CGI.escape(signature)}").should succeed
     end
 
     it "should work if the signature is part of the path" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      signature = Signature.create(url, @secret)
+      signature = Imageproxy::Signature.create(url, @secret)
       get("#{url}/signature/#{URI.escape(signature)}").should succeed
     end
   end
