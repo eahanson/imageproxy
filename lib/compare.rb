@@ -7,6 +7,6 @@ class Compare < Command
   end
 
   def execute
-    execute_command %'compare -metric AE "#{@path_a}" "#{@path_b}" "#{Tempfile.new("compare").path}"'
+    execute_command %'compare -metric AE -fuzz 10% "#{@path_a}" "#{@path_b}" "#{Tempfile.new("compare").path}"'
   end
 end

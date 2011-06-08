@@ -33,15 +33,15 @@ class Server
         check_signature request, options
         check_domain options
 
-        [200, {"Content-Type" => "text/plain"}, Identify.new(options).execute(user_agent)]
+        [200, {"Content-Type" => "text/plain"}, [Identify.new(options).execute(user_agent)]]
       when "selftest"
-        [200, {"Content-Type" => "text/html"}, Selftest.html(request, config?(:signature_required), config(:signature_secret))]
+        [200, {"Content-Type" => "text/html"}, [Selftest.html(request, config?(:signature_required), config(:signature_secret))]]
       else
         @file_server.call(env)
     end
   rescue
     STDERR.puts $!
-    [500, {"Content-Type" => "text/plain"}, "Error (#{$!})"]
+    [500, {"Content-Type" => "text/plain"}, ["Error (#{$!})"]]
   end
 
   private
