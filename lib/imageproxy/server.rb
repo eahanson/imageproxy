@@ -1,6 +1,7 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), "options")
 require File.join(File.expand_path(File.dirname(__FILE__)), "convert")
 require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
+require File.join(File.expand_path(File.dirname(__FILE__)), "identify_format")
 require File.join(File.expand_path(File.dirname(__FILE__)), "selftest")
 require File.join(File.expand_path(File.dirname(__FILE__)), "signature")
 require 'uri'
@@ -29,7 +30,7 @@ module Imageproxy
           end
 
           file.open
-          [200, {"Content-Type" => options.content_type, "Cache-Control" => "max-age=#{cachetime}, must-revalidate"}, file]
+          [200, {"Cache-Control" => "max-age=#{cachetime}, must-revalidate"}.merge(content_type(file, options)), file]
         when "identify"
           check_signature request, options
           check_domain options
@@ -102,6 +103,13 @@ module Imageproxy
       else
         sizes[0].to_i
       end
+    end
+
+    def content_type(file, options)
+      format = options.format
+      format = Imageproxy::IdentifyFormat.new(file).execute unless format
+      format = options.source unless format
+      format ? { "Content-Type" => MIME::Types.of(format).first.content_type } : {}
     end
   end
 end

@@ -42,10 +42,6 @@ module Imageproxy
       @hash[symbol.to_s] || @hash[symbol]
     end
 
-    def content_type
-      MIME::Types.of(@hash['source']).first.content_type
-    end
-
     private
 
     def unescape_source

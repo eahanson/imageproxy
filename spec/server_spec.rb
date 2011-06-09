@@ -118,5 +118,46 @@ describe "Server" do
     end
 
   end
+
+  describe "#content_type" do
+    before do
+      @options = Imageproxy::Options.new("/", {})
+
+      @mock_file = mock("file")
+      @mock_file.stub!(:path).and_return("/tmp/foo")
+
+      @mock_identify_format = Imageproxy::IdentifyFormat.new(@mock_file)
+      @mock_identify_format.stub!(:execute_command).and_return("identify: some error message\n")
+      Imageproxy::IdentifyFormat.stub!(:new).and_return(@mock_identify_format)
+    end
+
+    context "when the output format is specified" do
+      it "should return that format's mime type" do
+        @options = Imageproxy::Options.new("/", :format => "jpg")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when 'identify' knows the format" do
+      it "should return that format's mime type" do
+        @mock_identify_format.stub!(:execute_command).and_return("JPEG\n")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when the input source has a file extension" do
+      it "should return that format's mime type" do
+        @options = Imageproxy::Options.new("/", :source => "foo.jpg")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when nothing is known about the format" do
+      it "should not return a mime type" do
+        app.send(:content_type, @mock_file, @options).should == {}
+      end
+    end
+
+  end
 end
 
