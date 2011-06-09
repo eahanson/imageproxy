@@ -9,7 +9,7 @@ module Imageproxy
 
     def curl(url, options={})
       user_agent = options[:user_agent] || "imageproxy"
-      %|curl -s -A "#{user_agent}" "#{url}"|
+      %|curl -L -s -A "#{user_agent}" "#{url}"|
     end
 
     def to_path(obj)

@@ -21,7 +21,7 @@ describe Imageproxy::Convert do
     end
 
     it "should generate the proper command-line" do
-      @command.should_receive(:execute_command).with(%'curl -s -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
+      @command.should_receive(:execute_command).with(%'curl -L -s -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
       @command.execute
     end
 
