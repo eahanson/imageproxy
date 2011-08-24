@@ -24,7 +24,7 @@ module Imageproxy
           check_domain options
           check_size options
 
-          file = Convert.new(options).execute(user_agent)
+          file = convert_file(options, user_agent)
           class << file
             alias to_path path
           end
@@ -47,6 +47,10 @@ module Imageproxy
     end
 
     private
+
+    def convert_file(options, user_agent)
+      Convert.new(options).execute(user_agent, config(:timeout))
+    end
 
     def config(symbol)
       ENV["IMAGEPROXY_#{symbol.to_s.upcase}"]
@@ -107,9 +111,13 @@ module Imageproxy
 
     def content_type(file, options)
       format = options.format
-      format = Imageproxy::IdentifyFormat.new(file).execute unless format
+      format = identify_format(file) unless format
       format = options.source unless format
       format ? { "Content-Type" => MIME::Types.of(format).first.content_type } : {}
+    end
+
+    def identify_format(file)
+      Imageproxy::IdentifyFormat.new(file).execute
     end
   end
 end

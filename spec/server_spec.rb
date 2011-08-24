@@ -67,6 +67,8 @@ describe "Server" do
   context "when limiting to certain domains" do
     before do
       app.stub!(:config) { |sym| {:allowed_domains => " example.com  ,example.org"}[sym] }
+      app.stub!(:convert_file).and_return(Tempfile.new("fooo"))
+      app.stub!(:content_type).and_return({ "Content-Type" => "image/jpeg"})
     end
 
     it "should parse the allowed domains" do

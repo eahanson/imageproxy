@@ -11,8 +11,8 @@ module Imageproxy
       end
     end
 
-    def execute(user_agent=nil)
-      execute_command %'#{curl options.source, :user_agent => user_agent} | convert - #{convert_options} #{new_format}#{file.path}'
+    def execute(user_agent=nil, timeout=nil)
+      execute_command %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
       file
     end
 
