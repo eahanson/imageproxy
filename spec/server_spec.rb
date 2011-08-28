@@ -16,14 +16,14 @@ describe "Server" do
   end
 
   def app
-    @app ||= Server.new
+    @app ||= Imageproxy::Server.new
   end
 
   context "when converting" do
     it "should send back the right result" do
       app.stub!(:config) { |sym| nil }
       get("/convert/resize/10x20/source/#{escaped_test_image_url}").should succeed
-      Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
+      Imageproxy::Compare.new(response_body_as_file, test_image_path("10x20")).execute.should == "0"
     end
   end
 
@@ -53,13 +53,13 @@ describe "Server" do
 
     it "should work if the signature is correct" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      signature = Signature.create(url, @secret)
+      signature = Imageproxy::Signature.create(url, @secret)
       get("#{url}?signature=#{CGI.escape(signature)}").should succeed
     end
 
     it "should work if the signature is part of the path" do
       url = "/convert/resize/10x20/source/#{escaped_test_image_url}"
-      signature = Signature.create(url, @secret)
+      signature = Imageproxy::Signature.create(url, @secret)
       get("#{url}/signature/#{URI.escape(signature)}").should succeed
     end
   end
@@ -67,6 +67,8 @@ describe "Server" do
   context "when limiting to certain domains" do
     before do
       app.stub!(:config) { |sym| {:allowed_domains => " example.com  ,example.org"}[sym] }
+      app.stub!(:convert_file).and_return(Tempfile.new("fooo"))
+      app.stub!(:content_type).and_return({ "Content-Type" => "image/jpeg"})
     end
 
     it "should parse the allowed domains" do
@@ -115,6 +117,47 @@ describe "Server" do
 
     it "should fail when thumbnailing to a larger size" do
       get("/convert/thumbnail/50x51/source/#{escaped_test_image_url}").should fail
+    end
+
+  end
+
+  describe "#content_type" do
+    before do
+      @options = Imageproxy::Options.new("/", {})
+
+      @mock_file = mock("file")
+      @mock_file.stub!(:path).and_return("/tmp/foo")
+
+      @mock_identify_format = Imageproxy::IdentifyFormat.new(@mock_file)
+      @mock_identify_format.stub!(:execute_command).and_return("identify: some error message\n")
+      Imageproxy::IdentifyFormat.stub!(:new).and_return(@mock_identify_format)
+    end
+
+    context "when the output format is specified" do
+      it "should return that format's mime type" do
+        @options = Imageproxy::Options.new("/", :format => "jpg")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when 'identify' knows the format" do
+      it "should return that format's mime type" do
+        @mock_identify_format.stub!(:execute_command).and_return("JPEG\n")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when the input source has a file extension" do
+      it "should return that format's mime type" do
+        @options = Imageproxy::Options.new("/", :source => "foo.jpg")
+        app.send(:content_type, @mock_file, @options).should == { "Content-Type" => "image/jpeg" }
+      end
+    end
+
+    context "when nothing is known about the format" do
+      it "should not return a mime type" do
+        app.send(:content_type, @mock_file, @options).should == {}
+      end
     end
 
   end

@@ -1,7 +1,6 @@
 require 'bundler'
 require 'rack/sendfile'
 
-require File.join(File.expand_path(File.dirname(__FILE__)), "imageproxy")
-require File.join(File.expand_path(File.dirname(__FILE__)), "lib", "server")
+require File.join(File.expand_path(File.dirname(__FILE__)), "lib", "imageproxy")
 
-run Rack::Sendfile.new(Server.new)
+run Rack::Sendfile.new(Imageproxy::Server.new)

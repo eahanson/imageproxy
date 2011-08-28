@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Convert do
+describe Imageproxy::Convert do
   before do
     @mock_file = mock("file")
     @mock_file.stub!(:path).and_return("/mock/file/path")
   end
 
   def command(options)
-    command = Convert.new(Options.new("", {:source => "http%3A%2F%2Fexample.com%2Fdog.jpg"}.merge(options)))
+    command = Imageproxy::Convert.new(Imageproxy::Options.new("", {:source => "http%3A%2F%2Fexample.com%2Fdog.jpg"}.merge(options)))
     command.stub!(:file).and_return(@mock_file)
     command.stub!(:system)
     command
@@ -15,13 +15,13 @@ describe Convert do
 
   context "general" do
     before do
-      @command = Convert.new(Options.new("/convert/format/png/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg", {}))
+      @command = Imageproxy::Convert.new(Imageproxy::Options.new("/convert/format/png/resize/10x20/source/http%3A%2F%2Fexample.com%2Fdog.jpg", {}))
       @command.stub!(:file).and_return(@mock_file)
       @command.stub!(:system)
     end
 
     it "should generate the proper command-line" do
-      @command.should_receive(:execute_command).with(%'curl -s -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
+      @command.should_receive(:execute_command).with(%'curl -L -s -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
       @command.execute
     end
 
