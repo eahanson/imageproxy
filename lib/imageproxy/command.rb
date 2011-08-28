@@ -4,7 +4,7 @@ module Imageproxy
 
     def execute_command(command_line)
       stdin, stdout, stderr, wait_thr = Open3.popen3(command_line)
-      raise "Child process exited with non-zero exit code" unless wait_thr.value.success?
+      raise "Child process exited with non-zero exit code" unless wait_thr.nil? || wait_thr.value.success?
       [output_to_string(stdout), output_to_string(stderr)].join("")
     end
 

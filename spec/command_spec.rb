@@ -25,9 +25,13 @@ describe Imageproxy::Command do
 
     context "when the command exits with a non-zero status" do
       it "should raise an exception" do
-        lambda {
-          Imageproxy::Command.new.send(:execute_command, "ls /asdkljasldkjaskl")
-        }.should raise_exception
+        ruby_19 = RUBY_VERSION.split(".").map(&:to_i)[1] == 9
+
+        if ruby_19
+          lambda {
+            Imageproxy::Command.new.send(:execute_command, "ls /asdkljasldkjaskl")
+          }.should raise_exception
+        end
       end
     end
   end

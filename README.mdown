@@ -101,10 +101,6 @@ There are two major functions: `identify` and `convert`, plus a helpful `selftes
 
 `signature` To stop unauthorized use. See the "Signing Requests" section of this document.
 
-`allowed_domains` A comma-separated list of second-level domains (e.g., "example.com, example.org") that are valid domains for the `source` parameter. If not specified, then the `source` parameter can reference any domain.
-
-`max_size` The maximum dimension allowed for a `resize` or `thumbnail` operation. Specifying `20` would cause a resize of `10x30` to fail because the maximum dimension of `20` is less than the largest requested dimension of `30`.
-
 ### Request Format
 
 The request must start with `identify` or `convert` (for backwards-compatibility, `process` is a synonym for `convert`).
@@ -151,6 +147,18 @@ Example Ruby code to generate the signature:
 
     digest = OpenSSL::Digest::Digest.new("sha1")
     Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip.tr('+/', '-_')
+
+### Other Server Configuration
+
+`IMAGEPROXY_TIMEOUT` maximum duration (in whole seconds) for downloading a source image (not recommended if you're using Ruby 1.8)
+
+`IMAGEPROXY_CACHE_TIME` value of the max-age header for the converted image
+
+`IMAGEPROXY_VERBOSE` enables full Ruby stacktraces in your error log
+
+`IMAGEPROXY_ALLOWED_DOMAINS` A comma-separated list of second-level domains (e.g., "example.com, example.org") that are valid domains for the `source` parameter. If not specified, then the `source` parameter can reference any domain.
+
+`IMAGEPROXY_MAX_SIZE` The maximum dimension allowed for a `resize` or `thumbnail` operation. Specifying `20` would cause a resize of `10x30` to fail because the maximum dimension of `20` is less than the largest requested dimension of `30`.
 
 ### Obfuscating Requests
 

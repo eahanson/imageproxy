@@ -43,6 +43,7 @@ module Imageproxy
       end
     rescue
       STDERR.puts $!
+      STDERR.puts $!.backtrace.join("\n") if config?(:verbose)
       [500, {"Content-Type" => "text/plain"}, ["Error (#{$!})"]]
     end
 
