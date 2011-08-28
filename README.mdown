@@ -32,11 +32,13 @@ This project is pretty new. There are definitely some improvements that can be/n
 
 Feel free to help out with some of these :)
 
-  * better documentation
-  * X-Sendfile / X-Accel-Redirect header
-  * signature generation testing tool
+  * specify crop size and offset
+  * create rounded corners
   * try mounting inside a Rails app
   * Rails helper for generating image tags that use imageproxy
+  * X-Sendfile / X-Accel-Redirect header
+  * better documentation
+  * signature generation testing tool
   * package as a gem?
   * nice error messages for improper API use
   * performance
