@@ -15,6 +15,7 @@ module Imageproxy
       @hash["source"] = @hash.delete("src") if @hash.has_key?("src")
 
       unescape_source
+      unescape_overlay
       unescape_signature
       check_parameters
     end
@@ -46,6 +47,10 @@ module Imageproxy
 
     def unescape_source
       @hash['source'] &&= CGI.unescape(CGI.unescape(@hash['source']))
+    end
+
+    def unescape_overlay
+      @hash['overlay'] &&= CGI.unescape(CGI.unescape(@hash['overlay']))
     end
 
     def unescape_signature

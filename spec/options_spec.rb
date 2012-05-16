@@ -32,6 +32,23 @@ describe Imageproxy::Options do
       end
     end
 
+    context "overlay" do
+      context "when double-escaped" do
+        subject { Imageproxy::Options.new "/convert/overlay/http%253A%252F%252Fexample.com%252Fframe.jpg", {} }
+        it("should unescape") { subject.overlay.should == "http://example.com/frame.jpg" }
+      end
+
+      context "when escaped" do
+        subject { Imageproxy::Options.new "/convert/overlay/http%3A%2F%2Fexample.com%2Fframe.jpg", {} }
+        it("should unescape") { subject.overlay.should == "http://example.com/frame.jpg" }
+      end
+
+      context "when not escaped" do
+        subject { Imageproxy::Options.new "/convert/overlay/foo", {} }
+        it("should not unescape") { subject.overlay.should == "foo" }
+      end
+    end
+
     context "signature" do
       context "when escaped with + signs" do
         subject { Imageproxy::Options.new "/process/source/foo/signature/foo+bar", {} }

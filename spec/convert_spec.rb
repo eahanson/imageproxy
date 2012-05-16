@@ -148,4 +148,24 @@ describe Imageproxy::Convert do
       command({:resize => "10x10"}).convert_options.should_not match /interlace/
     end
   end
+
+  context "when compositing" do
+    before do
+      @command = command("overlay" => "http%3A%2F%2Fexample.com%2Fframe.jpg")
+      @command.stub!(:file).and_return(@mock_file)
+      @command.stub!(:system)
+    end
+
+    it "should fetch both the overlay and the source, and call the composite command to composit the overlay on top of the source" do
+      @command.should_receive(:execute_command).with(%r|curl -L -s -A "imageproxy" -o [^ ]+ "http://example.com/frame.jpg"|)
+      @command.should_receive(:execute_command).with(
+        %r{curl -L -s -A "imageproxy" "http://example.com/dog.jpg" | composite [^ ]+ - - | convert - png:/mock/file/path})
+      @command.execute
+    end
+
+    it "should return the output file" do
+      @command.stub!(:execute_command)
+      @command.execute.should == @mock_file
+    end
+  end
 end

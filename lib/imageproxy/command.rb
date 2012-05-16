@@ -11,7 +11,8 @@ module Imageproxy
     def curl(url, options={})
       user_agent = options[:user_agent] || "imageproxy"
       timeout = options[:timeout] ? "-m #{options[:timeout]} " : ""
-      %|curl #{timeout}-L -s -A "#{user_agent}" "#{url}"|
+      output = options[:output]
+      %|curl #{timeout}-L -s -A "#{user_agent}" #{output ? "-o #{output} ": ""}"#{url}"|
     end
 
     def to_path(obj)

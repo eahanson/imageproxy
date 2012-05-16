@@ -6,15 +6,25 @@ module Imageproxy
 
     def initialize(options)
       @options = options
-      if (!(options.resize || options.thumbnail || options.rotate || options.flip || options.format || options.quality))
+      if (!(options.resize || options.thumbnail || options.rotate || options.flip || options.format ||
+        options.quality || options.overlay))
         raise "Missing action or illegal parameter value"
       end
     end
 
     def execute(user_agent=nil, timeout=nil)
-      execute_command %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
-      file
+      if options.overlay
+        @overlay_file ||= Tempfile.new("imageproxy").tap(&:close)
+        execute_command(curl options.overlay, :user_agent => user_agent, :timeout => timeout, :output => @overlay_file.path)
+        execute_command curl(options.source, :user_agent => user_agent, :timeout => timeout) +
+                          "| composite #{@overlay_file.path} - - | convert - #{convert_options} #{new_format}#{file.path}"
+        file
+      else
+        execute_command %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
+        file
+      end
     end
+
 
     def convert_options
       convert_options = []

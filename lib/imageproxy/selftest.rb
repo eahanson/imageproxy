@@ -19,6 +19,9 @@ module Imageproxy
       raw_source = "http://eahanson.s3.amazonaws.com/imageproxy/sample.png"
       source = CGI.escape(URI.escape(URI.escape(raw_source)))
 
+      raw_overlay = "http://www.imagemagick.org/image/smile.gif"
+      overlay = CGI.escape(URI.escape(URI.escape(raw_overlay)))
+
       html += <<-HTML
       <h3>Original Image</h3>
       <a href="#{raw_source}">#{raw_source}</a>
@@ -41,7 +44,10 @@ module Imageproxy
         ["Rotating to a non-90-degree increment", "/convert?rotate=120&source=#{source}"],
         ["Rotating to a non-90-degree increment with a background color", "/convert?rotate=120&background=%23ff00ff&source=#{source}"],
 
-        ["Combo", "/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=#{source}"]
+        ["Combo", "/convert?resize=100x100&shape=cut&rotate=45&background=%23ff00ff&source=#{source}"],
+
+        ["Compositing", "/convert?source=#{source}&overlay=#{overlay}"],
+        ["Composite and then do something else", "/convert?source=#{source}&overlay=#{overlay}&rotate=50"]
       ]
 
       examples.each do |example|
