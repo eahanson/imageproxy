@@ -34,12 +34,10 @@ Feel free to help out with some of these :)
 
   * specify crop size and offset
   * create rounded corners
-  * try mounting inside a Rails app
   * Rails helper for generating image tags that use imageproxy
   * X-Sendfile / X-Accel-Redirect header
   * better documentation
   * signature generation testing tool
-  * package as a gem?
   * nice error messages for improper API use
   * performance
 
@@ -167,6 +165,9 @@ You may obfuscate your requests by Base64 encoding and then URL encoding your qu
     http://example.com/convert?src=http://example.com/dog.jpg&resize=10x10
     http://example.com/convert?_=c3JjPWh0dHA6Ly9leGFtcGxlLmNvbS9kb2cuanBnJnJlc2l6ZT0xMHgxMA%3D%3D
     http://example.com/convert/-/c3JjPWh0dHA6Ly9leGFtcGxlLmNvbS9kb2cuanBnJnJlc2l6ZT0xMHgxMA%3D%3D
+
+You can also replace the "=" characters in the Base64-encoded strings with "." characters which may make it possible to
+avoid having to percent-escape.
 
 ### Example requests
 

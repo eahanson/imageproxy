@@ -60,6 +60,16 @@ describe Imageproxy::Options do
       options.resize.should == "20x20"
       options.source.should == "http://example.com/dog.jpg"
     end
+
+    it "should allow padding with dots instead of equals signs" do
+      encoded = Base64.encode64("resize/20x20/source/http%3A%2F%2Fexample.com%2Fdo.jpg")
+      encoded.should include "="
+      encoded.gsub! "=", "."
+      escaped = CGI.escape(encoded)
+      options = Imageproxy::Options.new "/convert/-/#{escaped}", {}
+      options.resize.should == "20x20"
+      options.source.should == "http://example.com/do.jpg"
+    end
   end
 
   describe "quality" do
