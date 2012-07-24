@@ -43,6 +43,16 @@ module Imageproxy
       @hash[symbol.to_s] || @hash[symbol]
     end
 
+    def to_s
+      @hash.map do |key, value|
+        if key && value
+          "#{CGI::escape(key)}=#{CGI::escape(value)}"
+        else
+          nil
+        end
+      end.compact.join(', ')
+    end
+
     private
 
     def unescape_source

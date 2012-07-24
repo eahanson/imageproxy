@@ -42,6 +42,7 @@ module Imageproxy
           @file_server.call(env)
       end
     rescue
+      STDERR.puts "Request failed: #{options}"
       STDERR.puts $!
       STDERR.puts $!.backtrace.join("\n") if config?(:verbose)
       [500, {"Content-Type" => "text/plain"}, ["Error (#{$!})"]]

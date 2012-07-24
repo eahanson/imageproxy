@@ -89,6 +89,29 @@ describe Imageproxy::Options do
     end
   end
 
+  describe "#to_s" do
+    it "should show all the options" do
+      options = Imageproxy::Options.new "/convert",  { "resize" => "20x20" }
+      options.to_s.should == "command=convert, resize=20x20"
+    end
+
+    it "should show all the options even if there is obfuscation" do
+      encoded = CGI.escape(Base64.encode64("resize=20x20&source=http://example.com/dog.jpg"))
+      options = Imageproxy::Options.new "/convert", "_" => encoded
+      options.to_s.should == "command=convert, resize=20x20, source=http%3A%2F%2Fexample.com%2Fdog.jpg"
+    end
+
+    it "should be OK with a nil key" do
+      options = Imageproxy::Options.new "/convert",  { nil => "20x20" }
+      options.to_s.should == "command=convert"
+    end
+
+    it "should be OK with a nil value" do
+      options = Imageproxy::Options.new "", {}
+      options.to_s.should == ""
+    end
+  end
+
   describe "quality" do
     it "should be set to 0 if it's less than 0" do
       Imageproxy::Options.new("/convert", "quality" => "-39").quality.should == "0"
