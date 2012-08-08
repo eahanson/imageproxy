@@ -21,3 +21,15 @@ end
 def escaped_test_image_url
   CGI.escape test_image_url
 end
+
+def test_broken_image_path
+  File.expand_path(File.dirname(__FILE__) + "/../public/does-not-exist.png")
+end
+
+def test_broken_image_url
+  "file://#{test_broken_image_path}"
+end
+
+def escaped_test_broken_image_url
+  CGI.escape test_broken_image_url
+end

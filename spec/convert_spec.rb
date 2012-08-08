@@ -21,7 +21,8 @@ describe Imageproxy::Convert do
     end
 
     it "should generate the proper command-line" do
-      @command.should_receive(:execute_command).with(%'curl -L -s -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
+      @command.should_receive(:execute_command).with(
+          %'curl -L -f -s -S -A "imageproxy" "http://example.com/dog.jpg" | convert - -resize 10x20 png:/mock/file/path')
       @command.execute
     end
 
@@ -157,9 +158,9 @@ describe Imageproxy::Convert do
     end
 
     it "should fetch both the overlay and the source, and call the composite command to composit the overlay on top of the source" do
-      @command.should_receive(:execute_command).with(%r|curl -L -s -A "imageproxy" -o [^ ]+ "http://example.com/frame.jpg"|)
+      @command.should_receive(:execute_command).with(%r|curl -L -f -s -S -A "imageproxy" -o [^ ]+ "http://example.com/frame.jpg"|)
       @command.should_receive(:execute_command).with(
-        %r{curl -L -s -A "imageproxy" "http://example.com/dog.jpg" | composite [^ ]+ - - | convert - png:/mock/file/path})
+        %r{curl -L -f -s -S -A "imageproxy" "http://example.com/dog.jpg" | composite [^ ]+ - - | convert - png:/mock/file/path})
       @command.execute
     end
 

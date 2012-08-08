@@ -121,6 +121,16 @@ describe "Server" do
 
   end
 
+  context "error handling on errors from curl" do
+    it "should fail if curl can't load from that URL" do
+      get("/convert/flip/vertical/source/#{escaped_test_broken_image_url}").should fail
+    end
+
+    it "should succeed if curl can load from that URL" do
+      get("/convert/flip/vertical/source/#{escaped_test_image_url}").should succeed
+    end
+  end
+
   describe "#content_type" do
     before do
       @options = Imageproxy::Options.new("/", {})
