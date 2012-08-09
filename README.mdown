@@ -280,6 +280,9 @@ Clone the imageproxy code:
 
 Set up Heroku:
 
+As of Aug 2012 cedar does not work out of the box but bamboo does (specify bamboo as
+an option to the heroku create command).
+
     http://devcenter.heroku.com/articles/quickstart
 
 Deploy:
