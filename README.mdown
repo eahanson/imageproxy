@@ -319,7 +319,7 @@ To run the specs
 Thanks
 ------
 
-Thanks to [David Hall](https://github.com/moonhouse) for code contributions.
+Thanks to [David Hall](https://github.com/moonhouse), [Andy Blyler](https://github.com/ablyler) and [NeedFeed](https://github.com/needfeed) for code contributions.
 
 License
 -------
