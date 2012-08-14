@@ -16,7 +16,7 @@ See http://imageproxy.heroku.com/selftest for some examples (it's running on Her
 Status
 ------
 
-This project is pretty new. There are definitely some improvements that can be/need to be made. Suggestions and pull requests are welcome.
+imageproxy is being used in production on at least one commercial website, keeping two big EC2 servers busy. There are definitely some feature and performance improvements that can be/need to be made. Suggestions and pull requests are welcome.
 
 ### Current Features
 
@@ -47,7 +47,16 @@ PERFORMANCE
 
 imageproxy doesn't do any sort of caching. That kind of thing is better left up to CDNs (like Amazon CloudFront or VoxCast CDN) or to caching proxies such as Varnish.
 
-Also, imageproxy itself isn't nearly as fast as it could be. It's written in an interpreted language, and it shells out to curl and ImageMagick to do its work. Presumably, it would be way faster written in C as an Apache module, but this implementation was quite a bit easier :)
+Also, imageproxy itself isn't nearly as fast as it could be. It's written in an interpreted language, and it shells out to curl and ImageMagick to do its work. Presumably, it would be way faster written in C as an Apache module or something.
+
+
+REQUIREMENTS
+------------
+
+  * [Ruby](http://www.ruby-lang.org/)
+  * [Rack](http://rack.github.com)
+  * [Imagemagick](http://www.imagemagick.org/)
+  * [Curl](http://curl.haxx.se)
 
 
 INSTALLING
@@ -83,7 +92,7 @@ There are two major functions: `identify` and `convert`, plus a helpful `selftes
 
 `thumbnail` The new size of the image, in "WxH" format (e.g., `20x30`). Thumbnailing assumes the resulting image will be pretty small and makes some optimizations.
 
-`shape` The shape of the image, when `resize`ing or `thumbnail`ing to a different aspect ratio. The value can be `preserve` which will preserve the original aspect ratio, `pad` which will add padding to keep the proper aspect ratio (you can supply a `background` parameter to choose the background color to pad with, or leave blank to pad with transparent color if the image format allows it), and `cut` which will cut the image to fit the new size.
+`shape` The shape of the image, when `resize`ing or `thumbnail`ing to a different aspect ratio. The value can be `preserve` which will preserve the original aspect ratio, `pad` which will add padding to keep the proper aspect ratio (you can supply a `background` parameter to choose the background color to pad with, or leave blank to pad with transparent color if the image format allows it), and `cut` which will cut the image to fit the new size. The default is `preserve`.
 
 `flip` Flip the image. The value can be `horizontal` or `vertical`.
 
@@ -91,9 +100,9 @@ There are two major functions: `identify` and `convert`, plus a helpful `selftes
 
 `format` Change the format. Possible formats include `gif`, `jpg`, `png`, `png8`, etc.
 
-`quality` Choose the compression quality for formats that support lossy compression. The value can be any number from 0 to 100.
+`quality` Choose the compression quality for formats that support lossy compression. The value can be any number from 0 to 100. The default is to use [Imagemagick's default quality settings](http://www.imagemagick.org/script/command-line-options.php#quality).
 
-`progressive` Choose whether a JPEG image should be a progressive JPEG or not. Possible values are `true` and `false`.
+`progressive` Choose whether a JPEG image should be a progressive JPEG or not. Possible values are `true` and `false`. The default is `false`.
 
 `background` Some operations allow for a background color to be provided. The format is hex (e.g., `#ff00ff`) or rgba (e.g., `rgba(20,30,19,0.4)`)
 
@@ -110,6 +119,8 @@ The parameters can be query string parameters, like this:
 Or, the parameters can be Amazon CloudFront-compatible URLs, like this:
 
     http://example.com/convert/resize/100x100/shape/cut
+
+(Note that CloudFront now optionally support query parameters.)
 
 You can also mix the parameters if you like. This doesn't make much sense except for the case of the `signature` parameter which must be a query param:
 
@@ -308,7 +319,7 @@ To run the specs
 Thanks
 ------
 
-Thanks to [David Hall](https://github.com/moonhouse) for code contributions.
+Thanks to [David Hall](https://github.com/moonhouse), [Andy Blyler](https://github.com/ablyler) and [NeedFeed](https://github.com/needfeed) for code contributions.
 
 License
 -------
