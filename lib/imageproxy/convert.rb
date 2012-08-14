@@ -15,16 +15,23 @@ module Imageproxy
     def execute(user_agent=nil, timeout=nil)
       if options.overlay
         @overlay_file ||= Tempfile.new("imageproxy").tap(&:close)
-        execute_command(curl options.overlay, :user_agent => user_agent, :timeout => timeout, :output => @overlay_file.path)
-        execute_command curl(options.source, :user_agent => user_agent, :timeout => timeout) +
+        try_command_with_timeout(curl options.overlay, :user_agent => user_agent, :timeout => timeout, :output => @overlay_file.path)
+        try_command_with_timeout curl(options.source, :user_agent => user_agent, :timeout => timeout) +
                           "| composite #{@overlay_file.path} - - | convert - #{convert_options} #{new_format}#{file.path}"
         file
       else
-        execute_command %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
+        try_command_with_timeout %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
         file
       end
     end
 
+    def try_command_with_timeout cmd
+      Timeout::timeout(10) { execute_command cmd }
+    rescue Timeout::Error => e
+      puts "Command timed out after 10 seconds, retrying >#{cmd}<"
+      execute_command cmd
+      puts "SUCCESS " * 20
+    end
 
     def convert_options
       convert_options = []
