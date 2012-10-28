@@ -1,3 +1,5 @@
+require 'open3'
+
 module Imageproxy
   class Command
     protected
