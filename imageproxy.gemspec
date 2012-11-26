@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "imageproxy"
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Erik Hanson"]
-  s.date = "2012-08-08"
+  s.date = "2012-11-26"
   s.description = "A image processing proxy server, written in Ruby as a Rack application. Requires ImageMagick."
   s.email = "erik@eahanson.com"
   s.extra_rdoc_files = [
