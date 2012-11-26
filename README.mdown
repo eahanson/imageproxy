@@ -319,7 +319,12 @@ To run the specs
 Thanks
 ------
 
-Thanks to [David Hall](https://github.com/moonhouse), [Andy Blyler](https://github.com/ablyler) and [NeedFeed](https://github.com/needfeed) for code contributions.
+Thanks to the following for code contributions:
+
+  * [David Hall](https://github.com/moonhouse)
+  * [Andy Blyler](https://github.com/ablyler)
+  * [NeedFeed](https://github.com/needfeed)
+  * [Daniel Szmulewicz](https://github.com/danielsz)
 
 License
 -------
