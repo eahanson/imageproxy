@@ -1,4 +1,5 @@
 require File.join(File.expand_path(File.dirname(__FILE__)), "command")
+require "timeout"
 
 module Imageproxy
   class Convert < Imageproxy::Command
