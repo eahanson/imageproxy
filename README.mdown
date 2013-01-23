@@ -42,7 +42,7 @@ Feel free to help out with some of these :)
   * performance
 
 
-PERFORMANCE
+Performance
 -----------
 
 imageproxy doesn't do any sort of caching. That kind of thing is better left up to CDNs (like Amazon CloudFront or VoxCast CDN) or to caching proxies such as Varnish.
@@ -50,7 +50,7 @@ imageproxy doesn't do any sort of caching. That kind of thing is better left up 
 Also, imageproxy itself isn't nearly as fast as it could be. It's written in an interpreted language, and it shells out to curl and ImageMagick to do its work. Presumably, it would be way faster written in C as an Apache module or something.
 
 
-REQUIREMENTS
+Requirements
 ------------
 
   * [Ruby](http://www.ruby-lang.org/)
@@ -59,7 +59,7 @@ REQUIREMENTS
   * [Curl](http://curl.haxx.se)
 
 
-INSTALLING
+Installing
 ----------
 
   gem install imageproxy
@@ -315,6 +315,12 @@ Make sure everthing is working:
 To run the specs
 
     rake spec
+
+Related
+-------
+
+  * [Thumbor](https://github.com/globocom/thumbor) is similar but has "smart crop" using various detection algorithms and some other features.
+  
 
 Thanks
 ------
