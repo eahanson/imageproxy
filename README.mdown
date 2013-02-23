@@ -324,6 +324,7 @@ Related
 -------
 
   * [Thumbor](https://github.com/globocom/thumbor) is similar but has "smart crop" using various detection algorithms and some other features.
+  * [Imgix](http://www.imgix.com) is a service that handles all of this for you, plus has a bunch of cool features
   
 
 Thanks
