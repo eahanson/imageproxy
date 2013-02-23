@@ -41,6 +41,7 @@ Feel free to help out with some of these :)
   * nice error messages for improper API use
   * performance
 
+See also the [release notes](https://github.com/eahanson/imageproxy/blob/master/release-notes.mdown)
 
 Performance
 -----------
