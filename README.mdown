@@ -169,6 +169,9 @@ Example Ruby code to generate the signature:
 
 `IMAGEPROXY_MAX_SIZE` The maximum dimension allowed for a `resize` or `thumbnail` operation. Specifying `20` would cause a resize of `10x30` to fail because the maximum dimension of `20` is less than the largest requested dimension of `30`.
 
+`IMAGEPROXY_WORLD_READABLE_TEMPFILE` set to `true` if you want the generated tempfiles to be `-rw-r--r--` instead of the default `-rw-------`
+
+
 ### Obfuscating Requests
 
 You may obfuscate your requests by Base64 encoding and then URL encoding your query string or path. The parameter name for this encoded value is `_` if you're using a query string or `-` if you're using a path. Example:

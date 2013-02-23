@@ -32,6 +32,18 @@ describe Imageproxy::Convert do
     end
   end
 
+  describe "#file" do
+    it "should create a world-readable tempfile if requested" do
+      convert = Imageproxy::Convert.new(
+        Imageproxy::Options.new("", {:resize=> "20x20", :source => "http%3A%2F%2Fexample.com%2Fdog.jpg"}),
+        world_readable_tempfile: true)
+      mock_file = mock("Tempfile", close: nil, path: "")
+      mock_file.should_receive(:chmod).with(0644)
+      Tempfile.should_receive(:new).and_return(mock_file)
+      convert.file
+    end
+  end
+
   context "when resizing" do
     it("with no extra args") do
       command(:resize => "10x20").convert_options.should ==

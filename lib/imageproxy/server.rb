@@ -51,7 +51,9 @@ module Imageproxy
     private
 
     def convert_file(options, user_agent)
-      Convert.new(options).execute(user_agent, config(:timeout))
+      Convert.
+        new(options, world_readable_tempfile: config?(:world_readable_tempfile)).
+        execute(user_agent, config(:timeout))
     end
 
     def config(symbol)

@@ -5,8 +5,10 @@ module Imageproxy
   class Convert < Imageproxy::Command
     attr_reader :options
 
-    def initialize(options)
+    def initialize(options, settings={})
       @options = options
+      @settings = settings
+
       if (!(options.resize || options.thumbnail || options.rotate || options.flip || options.format ||
         options.quality || options.overlay))
         raise "Missing action or illegal parameter value"
@@ -84,9 +86,14 @@ module Imageproxy
     def new_format
       options.format ? "#{options.format}:" : ""
     end
-
+    
     def file
-      @tempfile ||= Tempfile.new("imageproxy").tap(&:close)
+      @tempfile ||= begin
+        file = Tempfile.new("imageproxy")
+        file.chmod 0644 if @settings[:world_readable_tempfile]
+        file.close
+        file
+      end
     end
   end
 end
