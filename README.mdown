@@ -1,7 +1,7 @@
 imageproxy
 ==========
 
-**[home page](https://github.com/eahanson/imageproxy)** • **[release notes](https://github.com/eahanson/imageproxy/blob/master/release-notes.mdown)**
+**[home page](https://github.com/eahanson/imageproxy)** • **[release notes](https://github.com/eahanson/imageproxy/blob/master/release-notes.mdown)** • **[RubyGems](http://rubygems.org/gems/imageproxy)**
 
 A image processing proxy server, written in Ruby as a Rack application.
 
