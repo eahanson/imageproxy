@@ -52,7 +52,8 @@ module Imageproxy
     def resize_thumbnail_options(size)
       case options.shape
         when "cut"
-          "#{size}^ -gravity center -extent #{size}"
+          background = options.background ? %|"#{options.background}"| : %|none -matte|
+          "#{size}^ -background #{background} -gravity center -extent #{size}"
         when "preserve"
           size
         when "pad"
