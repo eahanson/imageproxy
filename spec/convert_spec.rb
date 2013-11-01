@@ -72,7 +72,7 @@ describe Imageproxy::Convert do
 
     it("when cutting") do
       command(:resize => "10x20", :shape => "cut").convert_options.should ==
-        '-resize 10x20^ -gravity center -extent 10x20'
+        '-resize 10x20^ -background none -matte -gravity center -extent 10x20'
     end
   end
 
@@ -89,7 +89,7 @@ describe Imageproxy::Convert do
 
     it("when cutting") do
       command(:thumbnail => "10x20", :shape => "cut").convert_options.should ==
-        '-thumbnail 10x20^ -gravity center -extent 10x20'
+        '-thumbnail 10x20^ -background none -matte -gravity center -extent 10x20'
     end
   end
 
