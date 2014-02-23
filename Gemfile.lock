@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     awesome_print (0.3.2)
     configuration (1.2.0)
