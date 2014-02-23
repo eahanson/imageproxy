@@ -155,7 +155,7 @@ URL safe base64 is the normal encoding but with replacing the + with - and / wit
 
 Example Ruby code to generate the signature:
 
-    digest = OpenSSL::Digest::Digest.new("sha1")
+    digest = OpenSSL::Digest.new("sha1")
     Base64.encode64(OpenSSL::HMAC.digest(digest, your_secret_key, your_query_string)).strip.tr('+/', '-_')
 
 ### Other Server Configuration

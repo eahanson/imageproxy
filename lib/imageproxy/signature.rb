@@ -4,7 +4,7 @@ require 'openssl'
 module Imageproxy
   class Signature
     def self.create(path, secret)
-      Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha1'), secret, remove_signature_from(path))).strip.tr('+/', '-_')
+      Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha1'), secret, remove_signature_from(path))).strip.tr('+/', '-_')
     end
 
     def self.remove_signature_from(path)
