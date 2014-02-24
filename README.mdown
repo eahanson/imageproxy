@@ -337,6 +337,7 @@ Thanks to the following for code contributions:
   * [NeedFeed](https://github.com/needfeed)
   * [Daniel Szmulewicz](https://github.com/danielsz)
   * [Gordon Chan](https://github.com/gordonc)
+  * [Michael Mahemoff](https://github.com/mahemoff)
 
 License
 -------

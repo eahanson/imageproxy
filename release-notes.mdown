@@ -3,6 +3,11 @@ Imageproxy Release Notes
 
 See the [Imageproxy readme](https://github.com/eahanson/imageproxy/blob/master/README.mdown) for more info.
 
+### 1.0.1 - February 24, 2014
+
+  * Fix warning: "The source :rubygems is deprecated because HTTP requests are insecure" (thanks @mahemoff)
+  * Replace deprecated Digest::Digest with Digest (thanks @mahemoff)
+
 ### 1.0 - February 22, 2013
 
   * Bumped version to 1.0 -- imageproxy has been in production for over 1.5 years at this point and deserves a real version number
