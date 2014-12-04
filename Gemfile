@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 gem "rack"
 gem "rake"
 gem "mime-types"
+gem "thin"
+gem "gibberish"
+gem "figaro"
 
 group :development, :test do
   gem "heroku"
