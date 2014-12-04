@@ -3,7 +3,12 @@ GEM
   specs:
     awesome_print (0.3.2)
     configuration (1.2.0)
+    daemons (1.1.9)
     diff-lcs (1.1.2)
+    eventmachine (1.0.3)
+    figaro (1.0.0)
+      thor (~> 0.14)
+    gibberish (1.4.0)
     git (1.2.5)
     heroku (1.18.3)
       launchy (~> 0.3.2)
@@ -32,12 +37,19 @@ GEM
     rspec-mocks (2.5.0)
     shotgun (0.9)
       rack (>= 1.0)
+    thin (1.6.3)
+      daemons (~> 1.0, >= 1.0.9)
+      eventmachine (~> 1.0)
+      rack (~> 1.0)
+    thor (0.19.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   awesome_print
+  figaro
+  gibberish
   heroku
   jeweler
   mime-types
@@ -46,3 +58,4 @@ DEPENDENCIES
   rake
   rspec
   shotgun
+  thin

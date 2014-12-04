@@ -17,3 +17,6 @@ doc
 
 # jeweler generated
 pkg
+
+# Ignore application configuration
+/config/application.yml

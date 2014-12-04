@@ -4,6 +4,7 @@ require File.join(File.expand_path(File.dirname(__FILE__)), "identify")
 require File.join(File.expand_path(File.dirname(__FILE__)), "identify_format")
 require File.join(File.expand_path(File.dirname(__FILE__)), "selftest")
 require File.join(File.expand_path(File.dirname(__FILE__)), "signature")
+require File.join(File.expand_path(File.dirname(__FILE__)), "encryption")
 require 'uri'
 
 module Imageproxy
