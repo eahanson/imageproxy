@@ -16,8 +16,10 @@ module Imageproxy
     def curl(url, options={})
       user_agent = options[:user_agent] || "imageproxy"
       timeout = options[:timeout] ? "-m #{options[:timeout]} " : ""
+      authInfo = options[:authInfo]
+      language = options[:language]
       output = options[:output]
-      %|curl #{timeout}-L -f -s -S -A "#{user_agent}" #{output ? "-o #{output} ": ""}"#{url}"|
+      %|curl #{timeout}-L -f -s -S #{language ? "--header \"accept-language: #{language}\" " : ""}  #{authInfo ? "-u #{authInfo} " : ""} -A "#{user_agent}" #{output ? "-o #{output} ": ""}"#{url}"|
     end
 
     def to_path(obj)
