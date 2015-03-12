@@ -34,6 +34,9 @@ module Imageproxy
       puts "Command timed out after 10 seconds, retrying >#{cmd}<"
       execute_command cmd
       puts "SUCCESS " * 20
+    rescue Exception => e
+      puts "Error while retrieving #{options.source}"
+      execute_command %'convert #{Dir.pwd}/public/noImage.png #{convert_options} #{new_format}#{file.path}'
     end
 
     def convert_options
