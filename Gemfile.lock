@@ -19,7 +19,7 @@ GEM
     rack (1.2.2)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rake (0.8.7)
+    rake (10.4.2)
     rest-client (1.6.1)
       mime-types (>= 1.16)
     rspec (2.5.0)
@@ -46,3 +46,6 @@ DEPENDENCIES
   rake
   rspec
   shotgun
+
+BUNDLED WITH
+   1.10.5

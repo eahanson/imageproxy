@@ -3,7 +3,7 @@ Bundler.require :test
 
 desc "Run all specs"
 task :spec do
-  system 'rspec --format nested --color spec'
+  system 'rspec --color spec'
 end
 
 task :default => :spec
