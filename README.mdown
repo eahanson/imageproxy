@@ -338,6 +338,7 @@ Thanks to the following for code contributions:
   * [Daniel Szmulewicz](https://github.com/danielsz)
   * [Gordon Chan](https://github.com/gordonc)
   * [Michael Mahemoff](https://github.com/mahemoff)
+  * [Francesco Magnoni](https://github.com/francesco-magnoni)
 
 License
 -------
