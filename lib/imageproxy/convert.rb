@@ -18,12 +18,12 @@ module Imageproxy
     def execute(user_agent=nil, timeout=nil)
       if options.overlay
         @overlay_file ||= Tempfile.new("imageproxy").tap(&:close)
-        try_command_with_timeout(curl options.overlay, :user_agent => user_agent, :timeout => timeout, :output => @overlay_file.path)
-        try_command_with_timeout curl(options.source, :user_agent => user_agent, :timeout => timeout) +
+        try_command_with_timeout(curl options.overlay, :user_agent => user_agent, :timeout => timeout, :authInfo => options.authInfo, :language => options.language, :output => @overlay_file.path)
+        try_command_with_timeout curl(options.source, :user_agent => user_agent, :timeout => timeout, :authInfo => options.authInfo, :language => options.language) +
                           "| composite #{@overlay_file.path} - - | convert - #{convert_options} #{new_format}#{file.path}"
         file
       else
-        try_command_with_timeout %'#{curl options.source, :user_agent => user_agent, :timeout => timeout} | convert - #{convert_options} #{new_format}#{file.path}'
+        try_command_with_timeout %'#{curl options.source, :user_agent => user_agent, :timeout => timeout, :authInfo => options.authInfo, :language => options.language} | convert - #{convert_options} #{new_format}#{file.path}'
         file
       end
     end
