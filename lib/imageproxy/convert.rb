@@ -56,6 +56,8 @@ module Imageproxy
           "#{size}^ -background #{background} -gravity center -extent #{size}"
         when "preserve"
           size
+        when "preserve-not-enlarge"
+          "#{size}\\\> "
         when "pad"
           background = options.background ? %|"#{options.background}"| : %|none -matte|
           "#{size} -background #{background} -gravity center -extent #{size}"
