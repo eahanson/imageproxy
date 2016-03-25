@@ -93,7 +93,7 @@ There are two major functions: `identify` and `convert`, plus a helpful `selftes
 
 `thumbnail` The new size of the image, in "WxH" format (e.g., `20x30`). Thumbnailing assumes the resulting image will be pretty small and makes some optimizations.
 
-`shape` The shape of the image, when `resize`ing or `thumbnail`ing to a different aspect ratio. The value can be `preserve` which will preserve the original aspect ratio, `pad` which will add padding to keep the proper aspect ratio (you can supply a `background` parameter to choose the background color to pad with, or leave blank to pad with transparent color if the image format allows it), and `cut` which will cut the image to fit the new size. The default is `preserve`.
+`shape` The shape of the image, when `resize`ing or `thumbnail`ing to a different aspect ratio. The value can be `preserve` which will preserve the original aspect ratio, `pad` which will add padding to keep the proper aspect ratio (you can supply a `background` parameter to choose the background color to pad with, or leave blank to pad with transparent color if the image format allows it), and `cut` which will cut the image to fit the new size. Another option is "preserve-not-enlarge", it does the same as "preserve" but does nothing if the supplied image format is smaller than the desider one. The default is `preserve`.
 
 `flip` Flip the image. The value can be `horizontal` or `vertical`.
 
