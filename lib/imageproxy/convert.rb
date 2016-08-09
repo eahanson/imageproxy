@@ -10,7 +10,7 @@ module Imageproxy
       @settings = settings
 
       if (!(options.resize || options.thumbnail || options.rotate || options.flip || options.format ||
-        options.quality || options.overlay))
+        options.quality || options.overlay || options.crop))
         raise "Missing action or illegal parameter value"
       end
     end
@@ -41,6 +41,7 @@ module Imageproxy
 
     def convert_options
       convert_options = []
+      convert_options << "-crop #{crop_thumbnail_options(options.crop)}" if options.crop
       convert_options << "-resize #{resize_thumbnail_options(options.resize)}" if options.resize
       convert_options << "-thumbnail #{resize_thumbnail_options(options.thumbnail)}" if options.thumbnail
       convert_options << "-flop" if options.flip == "horizontal"
@@ -50,6 +51,10 @@ module Imageproxy
       convert_options << "-quality #{options.quality}" if options.quality
       convert_options << interlace_options if options.progressive
       convert_options.join " "
+    end
+
+    def crop_thumbnail_options(crop_settings)
+      crop_settings.gsub(" ", "+")
     end
 
     def resize_thumbnail_options(size)
